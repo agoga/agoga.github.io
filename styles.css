@@ -69,6 +69,17 @@ h1 {
   font-size: 1.1em;
   flex: 0 0 auto;
 }
+/* Ensure each row spans the full grid width */
+.link {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* For the email row: push the copy + compose buttons to the far right */
+.email-link #copyEmail {
+  margin-left: auto;
+}
 
 /* Email text */
 .email-text {

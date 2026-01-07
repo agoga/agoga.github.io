@@ -1,3 +1,4 @@
+/* styles.css */
 :root { color-scheme: light dark; }
 * { box-sizing: border-box; }
 
@@ -14,30 +15,11 @@ body {
   width: 100%;
   max-width: 520px;
   padding: 28px;
-  border: 1px solid rgba(127,127,127,.35);
+  border: 1px solid rgba(127, 127, 127, 0.35);
   border-radius: 18px;
   text-align: center;
   backdrop-filter: blur(8px);
 }
-
-.email-block {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-.email-text {
-  font-family: monospace;
-  user-select: text;        /* allow normal selection */
-  cursor: text;
-  opacity: 0.85;
-}
-
-.email-btn {
-  user-select: none;        /* prevents annoying highlight */
-}
-
 
 .avatar {
   width: 96px;
@@ -45,33 +27,87 @@ body {
   border-radius: 999px;
   object-fit: cover;
   margin-bottom: 10px;
-  border: 1px solid rgba(127,127,127,.35);
+  border: 1px solid rgba(127, 127, 127, 0.35);
 }
 
-h1 { margin: 8px 0 4px; font-size: 28px; }
-.subtitle { margin: 0 0 18px; opacity: .8; }
-
-.links { display: grid; gap: 12px; margin: 14px 0 6px; }
-.links a {
-  display: block;
-  padding: 14px 16px;
-  border-radius: 12px;
-  text-decoration: none;
-  border: 1px solid rgba(127,127,127,.35);
+h1 {
+  margin: 8px 0 4px;
+  font-size: 28px;
 }
-.links a:hover { transform: translateY(-1px); }
 
-.links a {
+.subtitle {
+  margin: 0 0 18px;
+  opacity: 0.8;
+}
+
+/* Links list */
+.links {
+  display: grid;
+  gap: 12px;
+  margin: 14px 0 6px;
+}
+
+/* applies to both <a class="link"> and <div class="link"> */
+.link {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  border: 1px solid rgba(127, 127, 127, 0.35);
 }
 
-.links i {
+.link:hover {
+  transform: translateY(-1px);
+}
+
+/* left-side icon for each row */
+.link .icon {
   width: 1.25em;
   text-align: center;
   font-size: 1.1em;
+  flex: 0 0 auto;
 }
 
+/* Email text */
+.email-text {
+  flex: 1 1 auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  user-select: text;
+  cursor: text;
+  opacity: 0.9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-footer { margin-top: 18px; opacity: .7; }
+/* small icon buttons on the right (copy + compose) */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.9;
+  flex: 0 0 auto;
+}
+
+/* make the icon buttons not inherit link underline */
+a.icon-btn { text-decoration: none; }
+
+.icon-btn:hover { opacity: 1; }
+
+/* ensure right-side icons aren't forced into the left-icon width */
+.icon-btn i {
+  width: auto;
+  text-align: center;
+}
+
+footer {
+  margin-top: 18px;
+  opacity: 0.7;
+}

@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,47 +7,58 @@
     <title>Adam Goga</title>
     <meta name="description" content="Links" />
     <link rel="stylesheet" href="styles.css" />
-    <!-- Font Awesome (email, GitHub, LinkedIn) -->
+
+    <!-- Font Awesome (email, GitHub, LinkedIn, copy, etc.) -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-  
+
     <!-- Academicons (Google Scholar, ORCID, etc.) -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css"
     />
-
   </head>
+
   <body>
     <main class="card">
       <img class="avatar" src="avatar.jpg" alt="Profile photo" />
       <h1>Adam Goga</h1>
-      <p class="subtitle">Computational physics Ph.D. and software engineer building performance-critical data pipelines and production software in C++ and Python.</p>
+      <p class="subtitle">
+        Computational physics Ph.D. and software engineer building
+        performance-critical data pipelines and production software in C++ and
+        Python.
+      </p>
 
-      <nav class="links">
-        <div class="email-block">
-          <a class="email-btn" href="mailto:adfgoga@email.com">
-            <i class="fa-solid fa-envelope"></i>
-            adfgoga@gmail.com
+      <nav class="links" aria-label="Links">
+        <!-- Email row: copy + compose -->
+        <div class="link email-link">
+          <i class="icon fa-solid fa-envelope" aria-hidden="true"></i>
+
+          <span class="email-text" id="email">adfgoga@gmail.com</span>
+
+          <button class="icon-btn" type="button" id="copyEmail" aria-label="Copy email">
+            <i class="fa-regular fa-copy" aria-hidden="true"></i>
+          </button>
+
+          <a class="icon-btn" href="mailto:adfgoga@gmail.com" aria-label="Compose email">
+            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
           </a>
-          <span class="email-text">adfgoga@email.com</span>
         </div>
 
-        <a href="https://www.linkedin.com/in/AdamGoga/" target="_blank" rel="noreferrer">
-          <i class="fa-brands fa-linkedin"></i>
+        <a class="link" href="https://www.linkedin.com/in/AdamGoga/" target="_blank" rel="noreferrer">
+          <i class="icon fa-brands fa-linkedin" aria-hidden="true"></i>
           LinkedIn
         </a>
-      
-        <a href="https://github.com/agoga" target="_blank" rel="noreferrer">
-          <i class="fa-brands fa-github"></i>
+
+        <a class="link" href="https://github.com/agoga" target="_blank" rel="noreferrer">
+          <i class="icon fa-brands fa-github" aria-hidden="true"></i>
           GitHub
         </a>
-      
-      
-        <a href="https://scholar.google.com/citations?user=UmfeNnkAAAAJ" target="_blank" rel="noreferrer">
-          <i class="ai ai-google-scholar"></i>
+
+        <a class="link" href="https://scholar.google.com/citations?user=UmfeNnkAAAAJ" target="_blank" rel="noreferrer">
+          <i class="icon ai ai-google-scholar" aria-hidden="true"></i>
           Google Scholar
         </a>
       </nav>
@@ -57,7 +69,28 @@
     </main>
 
     <script>
+      // footer year
       document.getElementById("y").textContent = new Date().getFullYear();
+
+      // copy email
+      const emailEl = document.getElementById("email");
+      const copyBtn = document.getElementById("copyEmail");
+      const email = emailEl.textContent.trim();
+
+      copyBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(email);
+
+          // quick visual feedback
+          const old = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i>';
+          setTimeout(() => {
+            copyBtn.innerHTML = old;
+          }, 900);
+        } catch (e) {
+          alert("Could not copy automatically. You can select and copy the email.");
+        }
+      });
     </script>
   </body>
 </html>

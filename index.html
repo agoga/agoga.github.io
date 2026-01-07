@@ -32,20 +32,18 @@
       </p>
 
       <nav class="links" aria-label="Links">
-        <!-- Email row: copy + compose -->
-        <div class="link email-link">
+
+        <!-- Email row: mailto link + copy button -->
+        <a class="link email-link" href="mailto:adfgoga@gmail.com" aria-label="Email Adam Goga">
           <i class="icon fa-solid fa-envelope" aria-hidden="true"></i>
-      
+        
           <span class="email-text" id="email">adfgoga@gmail.com</span>
-      
+        
           <button class="icon-btn" type="button" id="copyEmail" aria-label="Copy email">
             <i class="fa-regular fa-copy" aria-hidden="true"></i>
           </button>
-      
-          <a class="icon-btn" href="mailto:adfgoga@gmail.com" aria-label="Compose email">
-            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
-          </a>
-        </div>
+        </a>
+
       
         <a class="link" href="https://www.linkedin.com/in/AdamGoga/" target="_blank" rel="noreferrer">
           <i class="icon fa-brands fa-linkedin" aria-hidden="true"></i>
@@ -72,26 +70,27 @@
     <script>
       // footer year
       document.getElementById("y").textContent = new Date().getFullYear();
-
-      // copy email
+    
+      // copy email (and prevent the mailto link from firing)
       const emailEl = document.getElementById("email");
       const copyBtn = document.getElementById("copyEmail");
       const email = emailEl.textContent.trim();
-
-      copyBtn.addEventListener("click", async () => {
+    
+      copyBtn.addEventListener("click", async (e) => {
+        e.preventDefault();   // stop mailto navigation
+        e.stopPropagation();  // stop the <a> click bubbling
+    
         try {
           await navigator.clipboard.writeText(email);
-
-          // quick visual feedback
+    
           const old = copyBtn.innerHTML;
           copyBtn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i>';
-          setTimeout(() => {
-            copyBtn.innerHTML = old;
-          }, 900);
-        } catch (e) {
+          setTimeout(() => (copyBtn.innerHTML = old), 900);
+        } catch (err) {
           alert("Could not copy automatically. You can select and copy the email.");
         }
       });
     </script>
+
   </body>
 </html>

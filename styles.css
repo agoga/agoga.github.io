@@ -47,38 +47,30 @@ h1 {
   margin: 14px 0 6px;
 }
 
-/* applies to both <a class="link"> and <div class="link"> */
+/* Button rows */
 .link {
+  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 12px;
   padding: 14px 16px;
   border-radius: 12px;
   text-decoration: none;
   border: 1px solid rgba(127, 127, 127, 0.35);
+  text-align: left;
 }
 
 .link:hover {
   transform: translateY(-1px);
 }
 
-/* left-side icon for each row */
+/* Left-side icon for each row */
 .link .icon {
   width: 1.25em;
   text-align: center;
   font-size: 1.1em;
   flex: 0 0 auto;
-}
-/* Ensure each row spans the full grid width */
-.link {
-  width: 100%;
-  justify-content: flex-start;
-  text-align: left;
-}
-
-/* For the email row: push the copy + compose buttons to the far right */
-.email-link #copyEmail {
-  margin-left: auto;
 }
 
 /* Email text */
@@ -93,7 +85,12 @@ h1 {
   white-space: nowrap;
 }
 
-/* small icon buttons on the right (copy + compose) */
+/* Push copy button to the far right within the email row */
+.email-link #copyEmail {
+  margin-left: auto;
+}
+
+/* Copy button on the right */
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -107,12 +104,9 @@ h1 {
   flex: 0 0 auto;
 }
 
-/* make the icon buttons not inherit link underline */
-a.icon-btn { text-decoration: none; }
-
 .icon-btn:hover { opacity: 1; }
 
-/* ensure right-side icons aren't forced into the left-icon width */
+/* Prevent the button's icon from inheriting the fixed width used for left-side icons */
 .icon-btn i {
   width: auto;
   text-align: center;

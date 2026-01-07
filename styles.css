@@ -20,6 +20,25 @@ body {
   backdrop-filter: blur(8px);
 }
 
+.email-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.email-text {
+  font-family: monospace;
+  user-select: text;        /* allow normal selection */
+  cursor: text;
+  opacity: 0.85;
+}
+
+.email-btn {
+  user-select: none;        /* prevents annoying highlight */
+}
+
+
 .avatar {
   width: 96px;
   height: 96px;

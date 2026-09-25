@@ -16,6 +16,7 @@ html {
 }
 
 body {
+  isolation: isolate;
   margin: 0;
   background: var(--paper);
   color: var(--ink);
@@ -46,6 +47,8 @@ a:focus-visible {
 }
 
 .site-shell {
+  position: relative;
+  z-index: 1;
   max-width: 932px;
   padding: 0 40px;
   margin: auto;
@@ -414,4 +417,30 @@ footer a {
     padding: 20px 0;
   }
 
+}
+
+/* Optional decoration stays outside the page interaction layer. */
+#reaction-background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#animation-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+#animation-toggle:hover { text-decoration: underline; }
+#animation-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+
+@media (prefers-reduced-motion: reduce), print {
+  #reaction-background, #animation-toggle { display: none; }
 }

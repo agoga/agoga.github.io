@@ -9,6 +9,7 @@
     <link href="styles.css" rel="stylesheet"/>
   </head>
   <body>
+    <canvas id="reaction-background" aria-hidden="true" hidden></canvas>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-shell">
       <main id="main">
@@ -132,9 +133,11 @@
         </section>
       </main>
       <footer>
+        <button id="animation-toggle" type="button" hidden>Pause background</button>
         <span> Adam Goga <span aria-hidden="true">·</span> Scientific portfolio </span>
         <a href="#about"> Back to top <span aria-hidden="true">↑</span></a>
       </footer>
     </div>
+    <script type="module" src="js/background.js"></script>
   </body>
 </html>

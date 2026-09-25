@@ -1,6 +1,6 @@
 # Scientific portfolio
 
-A static HTML/CSS portfolio prepared for GitHub Pages. The page contains Adam Goga's background, research projects, and selected publications. Project illustrations remain placeholders. No build step, JavaScript, external fonts, or runtime dependencies are required.
+A static HTML/CSS portfolio prepared for GitHub Pages. The page contains Adam Goga's background, research projects, and selected publications. Project illustrations remain placeholders. No build step, external fonts, or runtime dependencies are required. The portfolio works without JavaScript; an optional WebGL2 background provides the animation.
 
 ## Preview locally
 
@@ -27,4 +27,12 @@ The root `.nojekyll` file skips Jekyll processing. Relative asset paths work at 
 - Project illustrations are decorative CSS placeholders. Replace them with project images when available.
 - Adjust layout and colors in `styles.css`.
 
-The reaction-diffusion background and page rasterization are later steps, documented in `project_plan.md`.
+## Background animation
+
+`js/background.js` runs a Gray-Scott simulation in two low-resolution RG16F textures. Adjust the constants in `SETTINGS` for feed/kill rates, diffusion, speed, resolution, opacity, and color. The numerical timestep and nine-point Laplacian should be tuned together.
+
+The canvas stays behind the HTML and ignores pointer input. A footer button pauses/resumes the pattern. Reduced motion disables it; hidden tabs stop updates. Unsupported WebGL2, missing float render targets, shader/framebuffer failures, and context loss leave the static portfolio usable. Resize resamples existing state; scrolling does not reset it.
+
+The current stage uses seeded patterns only. Page rasterization and mouse interaction remain later steps in `project_plan.md`.
+
+Validation: Chrome WebGL2 rendering, fixed 60/120 Hz timing, capped catch-up, pause/resume, visibility lifecycle, mobile/high-DPI resize, reduced motion at startup and runtime, context loss, and injected initialization failures. Safari, Firefox, and physical mobile GPU performance still need checking.

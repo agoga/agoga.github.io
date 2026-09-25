@@ -1,3 +1,5 @@
+import { PageSource } from './page-source.js';
+
 // The portfolio never depends on this optional effect.
 const SETTINGS = Object.freeze({
   feed: 0.029,
@@ -9,6 +11,9 @@ const SETTINGS = Object.freeze({
   maxStepsPerFrame: 8,
   simulationLongEdge: 384,
   displayLongEdge: 1600,
+  sourceLongEdge: 320,
+  sourceInterval: 250,
+  sourceStrength: 0.0015,
   opacity: 0.16,
   centerOpacity: 0.35,
   color: [0.38, 0.53, 0.43],
@@ -33,6 +38,8 @@ out vec4 result;
 const evolution = fragmentHeader + `
 uniform vec2 diffusion;
 uniform float feed, kill, timestep;
+uniform sampler2D pageSource;
+uniform float sourceStrength;
 vec2 sampleAt(ivec2 offset) {
   ivec2 size = textureSize(state, 0);
   ivec2 p = clamp(ivec2(gl_FragCoord.xy) + offset, ivec2(0), size - 1);
@@ -49,6 +56,8 @@ void main() {
   float reaction = c.x * c.y * c.y;
   vec2 change = diffusion * lap + vec2(-reaction + feed * (1.0-c.x),
                                        reaction - (feed+kill) * c.y);
+  float source = 1.0 - dot(texture(pageSource, uv).rgb, vec3(0.2126, 0.7152, 0.0722));
+  change.y += sourceStrength * clamp(source, 0.0, 1.0);
   result = vec4(clamp(c + timestep * change, 0.0, 1.0), 0.0, 1.0);
 }`;
 
@@ -83,7 +92,17 @@ class Simulation {
       this.updateProgram = this.program(evolution);
       this.displayProgram = this.program(display);
       this.copyProgram = this.program(copy);
+      this.sourceTexture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 255, 255, 255]));
       gl.useProgram(this.updateProgram);
+      gl.uniform1i(gl.getUniformLocation(this.updateProgram, 'pageSource'), 1);
+      this.sourceStrengthLocation = gl.getUniformLocation(this.updateProgram, 'sourceStrength');
+      this.sourceReady = false;
       gl.uniform2f(gl.getUniformLocation(this.updateProgram, 'diffusion'), SETTINGS.diffusionA, SETTINGS.diffusionB);
       for (const name of ['feed', 'kill', 'timestep']) {
         gl.uniform1f(gl.getUniformLocation(this.updateProgram, name), SETTINGS[name]);
@@ -210,16 +229,37 @@ class Simulation {
   }
 
   step() {
+    const gl = this.gl;
+    gl.useProgram(this.updateProgram);
+    gl.uniform1f(this.sourceStrengthLocation, this.sourceReady ? SETTINGS.sourceStrength : 0);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
     this.draw(this.updateProgram, this.front, this.back);
     [this.front, this.back] = [this.back, this.front];
   }
 
   render() { this.draw(this.displayProgram, this.front); }
 
+  setSource(image) {
+    const gl = this.gl;
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    try {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      if (gl.getError() !== gl.NO_ERROR) throw new Error('Page-source texture upload failed');
+      this.sourceReady = true;
+    } finally {
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+      gl.activeTexture(gl.TEXTURE0);
+    }
+  }
+
   dispose() {
     if (!this.gl) return;
     for (const target of this.targets) this.release(target);
     for (const program of this.programs) this.gl.deleteProgram(program);
+    this.gl.deleteTexture(this.sourceTexture);
     this.programs = [];
   }
 }
@@ -228,6 +268,7 @@ const canvas = document.querySelector('#reaction-background');
 const button = document.querySelector('#animation-toggle');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let simulation;
+let pageSource;
 let frame = 0;
 let previousTime = null;
 let accumulator = 0;
@@ -245,6 +286,7 @@ function stop() {
 function fail(error) {
   failed = true;
   stop();
+  pageSource?.dispose();
   canvas.hidden = true;
   button.hidden = true;
   simulation?.dispose();
@@ -273,18 +315,34 @@ function tick(now) {
 
 function sync() {
   stop();
+  pageSource?.setActive(false);
   canvas.hidden = failed || reducedMotion.matches;
   button.hidden = failed || reducedMotion.matches;
   if (failed || reducedMotion.matches || document.hidden) return;
   try {
     if (!simulation) simulation = new Simulation(canvas);
+    if (!pageSource) {
+      pageSource = new PageSource({
+        longEdge: SETTINGS.sourceLongEdge,
+        interval: SETTINGS.sourceInterval,
+        onImage: image => simulation.setSource(image),
+        onInvalidate: () => { if (simulation) simulation.sourceReady = false; },
+        onError: error => {
+          if (simulation) simulation.sourceReady = false;
+          console.warn('Page influence disabled; background continues:', error);
+        },
+      });
+    }
     button.textContent = paused ? 'Resume background' : 'Pause background';
     if (needsResize) {
       simulation.resize();
       needsResize = false;
     }
     simulation.render();
-    if (!paused) frame = requestAnimationFrame(tick);
+    if (!paused) {
+      pageSource.setActive(true);
+      frame = requestAnimationFrame(tick);
+    }
   } catch (error) { fail(error); }
 }
 
@@ -292,7 +350,7 @@ button.addEventListener('click', () => { paused = !paused; sync(); });
 document.addEventListener('visibilitychange', sync);
 reducedMotion.addEventListener('change', sync);
 window.addEventListener('resize', () => { needsResize = true; if (paused) sync(); }, { passive: true });
-window.addEventListener('pagehide', stop);
+window.addEventListener('pagehide', () => { stop(); pageSource?.setActive(false); });
 window.addEventListener('pageshow', sync);
 canvas.addEventListener('webglcontextlost', () => fail('WebGL context lost'));
 sync();

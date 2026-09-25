@@ -1,96 +1,86 @@
-<!-- index.html -->
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Adam Goga</title>
-    <meta name="description" content="Links" />
-    <link rel="stylesheet" href="styles.css" />
-
-    <!-- Font Awesome (email, GitHub, LinkedIn, copy, etc.) -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-
-    <!-- Academicons (Google Scholar, ORCID, etc.) -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css"
-    />
-  </head>
-
-  <body>
-    <main class="card">
-      <img class="avatar" src="avatar.jpg" alt="Profile photo" />
-      <h1>Adam Goga</h1>
-      <p class="subtitle">
-        Computational physics Ph.D. and software engineer building
-        performance-critical data pipelines and production software in C++ and
-        Python.
-      </p>
-
-      <nav class="links" aria-label="Links">
-
-        <!-- Email row: mailto link + copy button -->
-        <a class="link email-link" href="mailto:adfgoga@gmail.com" aria-label="Email Adam Goga">
-          <i class="icon fa-solid fa-envelope" aria-hidden="true"></i>
-        
-          <span class="email-text" id="email">adfgoga@gmail.com</span>
-        
-          <button class="icon-btn" type="button" id="copyEmail" aria-label="Copy email">
-            <i class="fa-regular fa-copy" aria-hidden="true"></i>
-          </button>
-        </a>
-
-      
-        <a class="link" href="https://www.linkedin.com/in/AdamGoga/" target="_blank" rel="noreferrer">
-          <i class="icon fa-brands fa-linkedin" aria-hidden="true"></i>
-          LinkedIn
-        </a>
-      
-        <a class="link" href="https://github.com/agoga" target="_blank" rel="noreferrer">
-          <i class="icon fa-brands fa-github" aria-hidden="true"></i>
-          GitHub
-        </a>
-      
-        <a class="link" href="https://scholar.google.com/citations?user=UmfeNnkAAAAJ" target="_blank" rel="noreferrer">
-          <i class="icon ai ai-google-scholar" aria-hidden="true"></i>
-          Google Scholar
-        </a>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A scientific portfolio preview with sample research, projects, and publications.">
+  <title>Your Name — Scientific Portfolio</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="wordmark" href="#about" aria-label="Your Name, introduction">YN<span aria-hidden="true">.</span></a>
+      <nav aria-label="Main navigation">
+        <a href="#research">Research</a>
+        <a href="#projects">Projects</a>
+        <a href="#publications">Publications</a>
       </nav>
+    </header>
 
+    <main id="main">
+      <div class="preview-note"><span class="status-dot" aria-hidden="true"></span> Site preview <span class="note-divider" aria-hidden="true">/</span> All content below is placeholder.</div>
 
-      <footer>
-        <small>© <span id="y"></span> Adam Goga</small>
-      </footer>
+      <!-- Replace the name, role, bio, and portrait with your own information. -->
+      <section class="intro" id="about" aria-labelledby="name">
+        <div class="intro-copy">
+          <p class="eyebrow">Researcher &amp; scientist</p>
+          <h1 id="name">Your Name</h1>
+          <p class="intro-lead">Exploring patterns in data,<br class="desktop-break"> models, and the natural world.</p>
+          <p>I’m a researcher at <span class="placeholder-text">Your Institution</span>, working at the intersection of scientific computing, machine learning, and complex systems.</p>
+          <p>This will be a short introduction to my work: the questions I study, the methods I use, and what I’m curious about next.</p>
+          <ul class="profile-links" aria-label="Profile links, coming soon">
+            <li><span>CV <small>soon</small></span></li>
+            <li><span>GitHub <small>soon</small></span></li>
+            <li><span>Scholar <small>soon</small></span></li>
+            <li><span>LinkedIn <small>soon</small></span></li>
+          </ul>
+        </div>
+        <figure class="portrait">
+          <img src="assets/portrait-placeholder.svg" width="240" height="280" alt="Abstract silhouette marking the place for your profile photo">
+          <figcaption>Your photo here</figcaption>
+        </figure>
+      </section>
+
+      <section class="content-section" id="research" aria-labelledby="research-title">
+        <div class="section-heading"><h2 id="research-title">Research</h2><span class="section-index" aria-hidden="true">01</span></div>
+        <p>I’m interested in how simple rules give rise to complex behavior, and how computational tools can help us understand it. These sample themes will be replaced with my current research interests.</p>
+        <ul class="research-topics" aria-label="Sample research interests">
+          <li>Scientific computing</li><li>Machine learning</li><li>Complex systems</li>
+        </ul>
+      </section>
+
+      <section class="content-section" id="projects" aria-labelledby="projects-title">
+        <div class="section-heading"><h2 id="projects-title">Selected projects</h2><span class="section-index" aria-hidden="true">02</span></div>
+        <p class="section-description">A few examples of how project work will appear here.</p>
+        <!-- Duplicate a project article to add work; replace sample labels and descriptions. -->
+        <article class="project">
+          <div class="project-art pattern-art" aria-hidden="true"><div class="pattern-grid"></div><span>A + B → patterns</span></div>
+          <div class="project-copy"><p class="item-meta">Sample project · 01</p><h3>Patterns from simple rules</h3><p>A computational study of how local interactions produce large-scale structure. This space will describe the question, approach, and main result.</p><ul class="tags" aria-label="Project methods"><li>Simulation</li><li>Visualization</li></ul><p class="pending">Project details coming soon</p></div>
+        </article>
+        <article class="project">
+          <div class="project-art data-art" aria-hidden="true"><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>From observations to insight</span></div>
+          <div class="project-copy"><p class="item-meta">Sample project · 02</p><h3>Learning from scientific data</h3><p>An example of using data-driven methods to investigate a scientific problem. A short summary will explain the contribution and why it matters.</p><ul class="tags" aria-label="Project methods"><li>Machine learning</li><li>Data analysis</li></ul><p class="pending">Code and results coming soon</p></div>
+        </article>
+        <article class="project">
+          <div class="project-art field-art" aria-hidden="true"><div class="orbits"><i></i><i></i><i></i></div><span>Tools for asking better questions</span></div>
+          <div class="project-copy"><p class="item-meta">Sample project · 03</p><h3>Interactive tools for discovery</h3><p>A small tool that makes a complex idea easier to explore. This description will introduce its purpose, audience, and the ideas behind its design.</p><ul class="tags" aria-label="Project methods"><li>Open source</li><li>Research tools</li></ul><p class="pending">Demo coming soon</p></div>
+        </article>
+      </section>
+
+      <section class="content-section" id="publications" aria-labelledby="publications-title">
+        <div class="section-heading"><h2 id="publications-title">Publications</h2><span class="section-index" aria-hidden="true">03</span></div>
+        <p class="section-description">Sample entries to show the format; these are not actual publications.</p>
+        <ol class="publication-list">
+          <li><span class="publication-year">20XX</span><div><h3>A descriptive title for a research paper</h3><p><strong>Your Name</strong>, Collaborator One, Collaborator Two</p><p class="venue">Journal or conference name · Placeholder</p></div></li>
+          <li><span class="publication-year">20XX</span><div><h3>Another question, method, or discovery</h3><p>Collaborator One, <strong>Your Name</strong></p><p class="venue">Journal or conference name · Placeholder</p></div></li>
+        </ol>
+      </section>
+      <section class="contact content-section" aria-labelledby="contact-title"><h2 id="contact-title">Get in touch</h2><p>Contact information and collaboration interests will go here.</p><span class="pending">Email address coming soon</span></section>
     </main>
-
-    <script>
-      // footer year
-      document.getElementById("y").textContent = new Date().getFullYear();
-    
-      // copy email (and prevent the mailto link from firing)
-      const emailEl = document.getElementById("email");
-      const copyBtn = document.getElementById("copyEmail");
-      const email = emailEl.textContent.trim();
-    
-      copyBtn.addEventListener("click", async (e) => {
-        e.preventDefault();   // stop mailto navigation
-        e.stopPropagation();  // stop the <a> click bubbling
-    
-        try {
-          await navigator.clipboard.writeText(email);
-    
-          const old = copyBtn.innerHTML;
-          copyBtn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i>';
-          setTimeout(() => (copyBtn.innerHTML = old), 900);
-        } catch (err) {
-          alert("Could not copy automatically. You can select and copy the email.");
-        }
-      });
-    </script>
-
-  </body>
+    <footer><span>Your Name <span aria-hidden="true">·</span> Scientific portfolio</span><a href="#about">Back to top <span aria-hidden="true">↑</span></a></footer>
+  </div>
+</body>
 </html>

@@ -1,7 +1,7 @@
 import { PageSource } from './page-source.js';
 
 // The portfolio never depends on this optional effect.
-const SETTINGS = Object.freeze({
+const SETTINGS = {
   feed: 0.029,
   kill: 0.057,
   diffusionA: 1,
@@ -15,10 +15,10 @@ const SETTINGS = Object.freeze({
   sourceInterval: 250,
   sourceStrength: 0.0015,
   initialSourceStrength: 0.5,
-  opacity: 0.16,
-  centerOpacity: 0.35,
+  opacity: 0.45,
+  centerOpacity: 0.8,
   color: [0.38, 0.53, 0.43],
-});
+};
 
 const vertex = `#version 300 es
 precision highp float;
@@ -103,8 +103,6 @@ class Simulation {
       this.displayProgram = this.program(display);
       this.copyProgram = this.program(copy);
       this.initializeProgram = this.program(initialize);
-      gl.useProgram(this.initializeProgram);
-      gl.uniform1f(gl.getUniformLocation(this.initializeProgram, 'initialSourceStrength'), SETTINGS.initialSourceStrength);
       this.sourceTexture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -116,14 +114,10 @@ class Simulation {
       gl.uniform1i(gl.getUniformLocation(this.updateProgram, 'pageSource'), 1);
       this.sourceStrengthLocation = gl.getUniformLocation(this.updateProgram, 'sourceStrength');
       this.sourceReady = false;
-      gl.uniform2f(gl.getUniformLocation(this.updateProgram, 'diffusion'), SETTINGS.diffusionA, SETTINGS.diffusionB);
-      for (const name of ['feed', 'kill', 'timestep']) {
-        gl.uniform1f(gl.getUniformLocation(this.updateProgram, name), SETTINGS[name]);
-      }
       gl.useProgram(this.displayProgram);
       gl.uniform3fv(gl.getUniformLocation(this.displayProgram, 'ink'), SETTINGS.color);
-      gl.uniform1f(gl.getUniformLocation(this.displayProgram, 'opacity'), SETTINGS.opacity);
       gl.uniform1f(gl.getUniformLocation(this.displayProgram, 'centerOpacity'), SETTINGS.centerOpacity);
+      this.applySettings();
       this.resize();
     } catch (error) {
       this.dispose();
@@ -155,6 +149,19 @@ class Simulation {
     } finally {
       for (const shader of shaders) gl.deleteShader(shader);
     }
+  }
+
+  applySettings() {
+    const gl = this.gl;
+    gl.useProgram(this.updateProgram);
+    gl.uniform2f(gl.getUniformLocation(this.updateProgram, 'diffusion'), SETTINGS.diffusionA, SETTINGS.diffusionB);
+    for (const name of ['feed', 'kill', 'timestep']) {
+      gl.uniform1f(gl.getUniformLocation(this.updateProgram, name), SETTINGS[name]);
+    }
+    gl.useProgram(this.initializeProgram);
+    gl.uniform1f(gl.getUniformLocation(this.initializeProgram, 'initialSourceStrength'), SETTINGS.initialSourceStrength);
+    gl.useProgram(this.displayProgram);
+    gl.uniform1f(gl.getUniformLocation(this.displayProgram, 'opacity'), SETTINGS.opacity);
   }
 
   target(width, height) {
@@ -271,6 +278,9 @@ class Simulation {
 
 const canvas = document.querySelector('#reaction-background');
 const button = document.querySelector('#animation-toggle');
+const controls = document.querySelector('#simulation-controls');
+const form = document.querySelector('#simulation-parameters');
+const status = document.querySelector('#simulation-status');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let simulation;
 let pageSource;
@@ -280,6 +290,55 @@ let accumulator = 0;
 let paused = false;
 let failed = false;
 let needsResize = true;
+let restartTimer = 0;
+
+const parameters = [
+  ['feed', 'Feed', 0, 0.1, 0.001],
+  ['kill', 'Kill', 0, 0.1, 0.001],
+  ['diffusionA', 'Diffusion A', 0, 1, 0.05],
+  ['diffusionB', 'Diffusion B', 0, 1, 0.05],
+  ['stepsPerSecond', 'Speed (steps/s)', 10, 240, 10],
+  ['opacity', 'Opacity', 0, 1, 0.05],
+  ['initialSourceStrength', 'Initial B strength', 0, 1, 0.05],
+  ['sourceStrength', 'Page input', 0, 0.01, 0.0005],
+  ['simulationLongEdge', 'Resolution (px)', 128, 768, 32],
+];
+for (const [name, title, min, max, step] of parameters) {
+  const label = document.createElement('label');
+  label.textContent = title;
+  const input = document.createElement('input');
+  Object.assign(input, { type: 'number', name, min, max, step, value: SETTINGS[name], required: true });
+  label.append(input);
+  form.append(label);
+}
+
+function restart() {
+  clearTimeout(restartTimer);
+  if (failed || reducedMotion.matches || !form.reportValidity()) return;
+  for (const [name] of parameters) SETTINGS[name] = form.elements.namedItem(name).valueAsNumber;
+  stop();
+  pageSource?.dispose();
+  pageSource = null;
+  if (simulation) {
+    simulation.initialized = false;
+    simulation.sourceReady = false;
+    simulation.applySettings();
+  }
+  needsResize = true;
+  status.textContent = 'Capturing page...';
+  sync();
+}
+
+form.addEventListener('submit', event => { event.preventDefault(); restart(); });
+form.addEventListener('input', () => {
+  clearTimeout(restartTimer);
+  if (!form.checkValidity()) { sync(); return; }
+  stop();
+  pageSource?.setActive(false);
+  status.textContent = 'Capturing page...';
+  restartTimer = setTimeout(restart, 200);
+});
+document.querySelector('#simulation-restart').addEventListener('click', restart);
 
 function stop() {
   cancelAnimationFrame(frame);
@@ -294,6 +353,7 @@ function fail(error) {
   pageSource?.dispose();
   canvas.hidden = true;
   button.hidden = true;
+  controls.hidden = true;
   simulation?.dispose();
   simulation = null;
   console.warn('Background animation disabled:', error);
@@ -323,6 +383,7 @@ function sync() {
   pageSource?.setActive(false);
   canvas.hidden = failed || reducedMotion.matches || !simulation?.initialized;
   button.hidden = failed || reducedMotion.matches || !simulation?.initialized;
+  controls.hidden = failed || reducedMotion.matches;
   if (failed || reducedMotion.matches || document.hidden) return;
   try {
     if (!simulation) simulation = new Simulation(canvas);
@@ -335,25 +396,29 @@ function sync() {
           canvas.hidden = false;
           button.hidden = false;
           simulation.render();
-          if (!frame) frame = requestAnimationFrame(tick);
+          status.textContent = paused ? 'Paused' : 'Running';
+          if (paused) pageSource.setActive(false);
+          else if (!frame) frame = requestAnimationFrame(tick);
         },
         onInvalidate: () => { if (simulation) simulation.sourceReady = false; },
         onError: error => {
           if (!simulation?.initialized) { fail(error); return; }
           if (simulation) simulation.sourceReady = false;
+          status.textContent = 'Page input unavailable';
           console.warn('Page influence disabled; background continues:', error);
         },
       });
     }
     button.textContent = paused ? 'Resume background' : 'Pause background';
+    status.textContent = !simulation.initialized ? 'Capturing page...' : paused ? 'Paused' : 'Running';
     if (needsResize) {
       simulation.resize();
       needsResize = false;
     }
     simulation.render();
-    if (!paused) {
+    if (!paused || !simulation.initialized) {
       pageSource.setActive(true);
-      if (simulation.initialized) frame = requestAnimationFrame(tick);
+      if (!paused && simulation.initialized) frame = requestAnimationFrame(tick);
     }
   } catch (error) { fail(error); }
 }

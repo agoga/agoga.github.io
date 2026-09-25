@@ -93,6 +93,9 @@ export class PageSource {
           // White space contributes zero source. Never capture the WebGL canvas.
           doc.documentElement.style.background = '#ffffff';
           doc.body.style.background = '#ffffff';
+          // Keep the controls' space, but omit their text/values from the source.
+          const controls = doc.querySelector('#simulation-controls');
+          if (controls) controls.style.visibility = 'hidden';
         },
       });
       const current = viewport.x === window.scrollX && viewport.y === window.scrollY

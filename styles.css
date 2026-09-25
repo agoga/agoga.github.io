@@ -442,5 +442,34 @@ footer a {
 #animation-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 
 @media (prefers-reduced-motion: reduce), print {
-  #reaction-background, #animation-toggle { display: none; }
+  #reaction-background, #simulation-controls { display: none; }
 }
+
+#simulation-controls {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+}
+
+#simulation-controls h2 { margin: 0 0 6px; font-family: inherit; font-size: 16px; font-weight: 600; line-height: 1.4; }
+#simulation-controls p { margin: 0 0 14px; font-size: 13px; color: var(--muted); }
+#simulation-parameters { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+#simulation-parameters label { display: grid; gap: 4px; font-size: 12px; }
+#simulation-parameters input {
+  width: 100%;
+  min-width: 0;
+  padding: 5px 8px;
+  border: 1px solid #b9c2b9;
+  border-radius: 3px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+#simulation-parameters input:focus-visible, #simulation-restart:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.simulation-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 12px; }
+#simulation-restart { border: 0; padding: 0; background: none; color: var(--accent); font: inherit; cursor: pointer; }
+#simulation-restart:hover { text-decoration: underline; }
+#simulation-status { color: var(--muted); }

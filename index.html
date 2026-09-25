@@ -12,6 +12,16 @@
     <canvas id="reaction-background" aria-hidden="true" hidden></canvas>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-shell">
+      <section id="simulation-controls" aria-labelledby="simulation-title" hidden>
+        <h2 id="simulation-title">Simulation</h2>
+        <p>Changing a value restarts the pattern from the visible page.</p>
+        <form id="simulation-parameters" aria-label="Simulation parameters"></form>
+        <div class="simulation-actions">
+          <button id="animation-toggle" type="button" hidden>Pause background</button>
+          <button id="simulation-restart" type="button">Restart from page</button>
+          <span id="simulation-status" role="status"></span>
+        </div>
+      </section>
       <main id="main">
         <section aria-labelledby="name" class="intro" id="about">
           <div class="intro-copy">
@@ -133,7 +143,6 @@
         </section>
       </main>
       <footer>
-        <button id="animation-toggle" type="button" hidden>Pause background</button>
         <span> Adam Goga <span aria-hidden="true">·</span> Scientific portfolio </span>
         <a href="#about"> Back to top <span aria-hidden="true">↑</span></a>
       </footer>

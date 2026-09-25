@@ -31,7 +31,7 @@ The root `.nojekyll` file skips Jekyll processing. Relative asset paths work at 
 
 `js/background.js` runs a Gray-Scott simulation in two low-resolution RG16F textures. Adjust the constants in `SETTINGS` for feed/kill rates, diffusion, speed, resolution, opacity, and color. The numerical timestep and nine-point Laplacian should be tuned together.
 
-The canvas stays behind the HTML and ignores pointer input. A footer button pauses/resumes the pattern. Reduced motion disables it; hidden tabs stop updates. Unsupported WebGL2, missing float render targets, shader/framebuffer failures, and context loss leave the static portfolio usable. Resize resamples existing state; scrolling does not reset it.
+The canvas stays behind the HTML and ignores pointer input. The top simulation panel pauses/resumes the pattern and provides numeric parameter controls. Reduced motion disables it; hidden tabs stop updates. Unsupported WebGL2, missing float render targets, shader/framebuffer failures, and context loss leave the static portfolio usable. Resize resamples existing state; scrolling does not reset it.
 
 The first accepted viewport snapshot initializes both simulation buffers: B is 0.5 times inverse luminance and A is 1 minus B. There are no scattered seeds, and the animation waits for this snapshot before starting. Subsequent captures provide only a weak continuous source of species B. `js/page-source.js` captures the viewport on load, scroll, resize, font/image completion, and content changes. White space contributes zero; darker content contributes more. The animation canvas and its control are excluded.
 
@@ -42,3 +42,9 @@ Tune `initialSourceStrength`, `sourceLongEdge`, `sourceInterval`, and `sourceStr
 Validation: Chrome WebGL2 rendering, fixed 60/120 Hz timing, capped catch-up, pause/resume, visibility lifecycle, mobile/high-DPI resize, reduced motion at startup and runtime, context loss, and injected initialization failures. Safari, Firefox, and physical mobile GPU performance still need checking.
 
 Page-source checks: viewport-corner alignment before/after scrolling, white-space conversion, excluded decoration, stale-result rejection, one capture in flight, pause/resume, reduced-motion loading, and rasterizer/capture failure fallback. Desktop capture elapsed times were about 76-98 ms on the current page and 179 ms with 105 publication entries; these are local measurements, not mobile performance guarantees.
+
+## Simulation controls
+
+The top panel exposes feed, kill, diffusion A/B, speed, opacity, initial B strength, continuous page input, and simulation resolution. Valid edits restart after a 200 ms typing delay, capturing the current viewport again and initializing both state buffers. Changes do not reuse an old snapshot. Restart from page repeats the capture without changing parameters; when paused, it displays the new initial state without advancing it. Controls are omitted from captures while preserving their layout space. Values reset to defaults on reload.
+
+Default opacity is 0.45 with less fading behind the content for easier inspection. The panel is hidden when JavaScript/WebGL is unavailable, under reduced motion, and when printing.

@@ -79,3 +79,8 @@ footer { border-top: 1px solid var(--line); padding: 23px 0 30px; display: flex;
   body { background: white; color: black; font-size: 11pt; }.site-shell { max-width: none; padding: 0; }.site-header, .preview-note, .skip-link, footer a { display: none; }
   .intro { padding-top: 0; }.project, .publication-list li { break-inside: avoid; }a { color: inherit; }.content-section { padding: 20px 0; }
 }
+
+.profile-links a { text-decoration: none; font-size: 13px; }
+.profile-links a:hover, .project-copy h3 a:hover { text-decoration: underline; }
+.project-copy h3 a { color: inherit; text-decoration: none; }
+.project-link { font-size: 12px; }

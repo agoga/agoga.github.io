@@ -1,86 +1,470 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A scientific portfolio preview with sample research, projects, and publications.">
-  <title>Your Name — Scientific Portfolio</title>
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="Adam Goga - computational physicist and software engineer working on semiconductor materials, solar cells, and scientific computing." name="description"/>
+  <title>
+   Adam Goga - Computational Physics
+  </title>
+  <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
+  <link href="styles.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <a class="skip-link" href="#main">
+   Skip to content
+  </a>
   <div class="site-shell">
-    <header class="site-header">
-      <a class="wordmark" href="#about" aria-label="Your Name, introduction">YN<span aria-hidden="true">.</span></a>
-      <nav aria-label="Main navigation">
-        <a href="#research">Research</a>
-        <a href="#projects">Projects</a>
-        <a href="#publications">Publications</a>
-      </nav>
-    </header>
-
-    <main id="main">
-      <div class="preview-note"><span class="status-dot" aria-hidden="true"></span> Site preview <span class="note-divider" aria-hidden="true">/</span> All content below is placeholder.</div>
-
-      <!-- Replace the name, role, bio, and portrait with your own information. -->
-      <section class="intro" id="about" aria-labelledby="name">
-        <div class="intro-copy">
-          <p class="eyebrow">Researcher &amp; scientist</p>
-          <h1 id="name">Your Name</h1>
-          <p class="intro-lead">Exploring patterns in data,<br class="desktop-break"> models, and the natural world.</p>
-          <p>I’m a researcher at <span class="placeholder-text">Your Institution</span>, working at the intersection of scientific computing, machine learning, and complex systems.</p>
-          <p>This will be a short introduction to my work: the questions I study, the methods I use, and what I’m curious about next.</p>
-          <ul class="profile-links" aria-label="Profile links, coming soon">
-            <li><span>CV <small>soon</small></span></li>
-            <li><span>GitHub <small>soon</small></span></li>
-            <li><span>Scholar <small>soon</small></span></li>
-            <li><span>LinkedIn <small>soon</small></span></li>
-          </ul>
-        </div>
-        <figure class="portrait">
-          <img src="assets/portrait-placeholder.svg" width="240" height="280" alt="Abstract silhouette marking the place for your profile photo">
-          <figcaption>Your photo here</figcaption>
-        </figure>
-      </section>
-
-      <section class="content-section" id="research" aria-labelledby="research-title">
-        <div class="section-heading"><h2 id="research-title">Research</h2><span class="section-index" aria-hidden="true">01</span></div>
-        <p>I’m interested in how simple rules give rise to complex behavior, and how computational tools can help us understand it. These sample themes will be replaced with my current research interests.</p>
-        <ul class="research-topics" aria-label="Sample research interests">
-          <li>Scientific computing</li><li>Machine learning</li><li>Complex systems</li>
-        </ul>
-      </section>
-
-      <section class="content-section" id="projects" aria-labelledby="projects-title">
-        <div class="section-heading"><h2 id="projects-title">Selected projects</h2><span class="section-index" aria-hidden="true">02</span></div>
-        <p class="section-description">A few examples of how project work will appear here.</p>
-        <!-- Duplicate a project article to add work; replace sample labels and descriptions. -->
-        <article class="project">
-          <div class="project-art pattern-art" aria-hidden="true"><div class="pattern-grid"></div><span>A + B → patterns</span></div>
-          <div class="project-copy"><p class="item-meta">Sample project · 01</p><h3>Patterns from simple rules</h3><p>A computational study of how local interactions produce large-scale structure. This space will describe the question, approach, and main result.</p><ul class="tags" aria-label="Project methods"><li>Simulation</li><li>Visualization</li></ul><p class="pending">Project details coming soon</p></div>
-        </article>
-        <article class="project">
-          <div class="project-art data-art" aria-hidden="true"><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>From observations to insight</span></div>
-          <div class="project-copy"><p class="item-meta">Sample project · 02</p><h3>Learning from scientific data</h3><p>An example of using data-driven methods to investigate a scientific problem. A short summary will explain the contribution and why it matters.</p><ul class="tags" aria-label="Project methods"><li>Machine learning</li><li>Data analysis</li></ul><p class="pending">Code and results coming soon</p></div>
-        </article>
-        <article class="project">
-          <div class="project-art field-art" aria-hidden="true"><div class="orbits"><i></i><i></i><i></i></div><span>Tools for asking better questions</span></div>
-          <div class="project-copy"><p class="item-meta">Sample project · 03</p><h3>Interactive tools for discovery</h3><p>A small tool that makes a complex idea easier to explore. This description will introduce its purpose, audience, and the ideas behind its design.</p><ul class="tags" aria-label="Project methods"><li>Open source</li><li>Research tools</li></ul><p class="pending">Demo coming soon</p></div>
-        </article>
-      </section>
-
-      <section class="content-section" id="publications" aria-labelledby="publications-title">
-        <div class="section-heading"><h2 id="publications-title">Publications</h2><span class="section-index" aria-hidden="true">03</span></div>
-        <p class="section-description">Sample entries to show the format; these are not actual publications.</p>
-        <ol class="publication-list">
-          <li><span class="publication-year">20XX</span><div><h3>A descriptive title for a research paper</h3><p><strong>Your Name</strong>, Collaborator One, Collaborator Two</p><p class="venue">Journal or conference name · Placeholder</p></div></li>
-          <li><span class="publication-year">20XX</span><div><h3>Another question, method, or discovery</h3><p>Collaborator One, <strong>Your Name</strong></p><p class="venue">Journal or conference name · Placeholder</p></div></li>
-        </ol>
-      </section>
-      <section class="contact content-section" aria-labelledby="contact-title"><h2 id="contact-title">Get in touch</h2><p>Contact information and collaboration interests will go here.</p><span class="pending">Email address coming soon</span></section>
-    </main>
-    <footer><span>Your Name <span aria-hidden="true">·</span> Scientific portfolio</span><a href="#about">Back to top <span aria-hidden="true">↑</span></a></footer>
+   <header class="site-header">
+    <a aria-label="Adam Goga, introduction" class="wordmark" href="#about">
+     AG
+     <span aria-hidden="true">
+      .
+     </span>
+    </a>
+    <nav aria-label="Main navigation">
+     <a href="#background">
+      Background
+     </a>
+     <a href="#projects">
+      Projects
+     </a>
+     <a href="#publications">
+      Publications
+     </a>
+    </nav>
+   </header>
+   <main id="main">
+    <section aria-labelledby="name" class="intro" id="about">
+     <div class="intro-copy">
+      <h1 id="name">
+       Adam Goga
+      </h1>
+      <p>
+       I'm a computational physicist with a background in software engineering. I build simulations and scientific software to study semiconductor materials and solar cell degradation.
+      </p>
+      <ul aria-label="Contact and profiles" class="profile-links">
+       <li>
+        <a href="mailto:adfgoga@gmail.com">
+         Email
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/agoga">
+         GitHub
+        </a>
+       </li>
+       <li>
+        <a href="https://scholar.google.com/citations?user=UmfeNnkAAAAJ">
+         Google Scholar
+        </a>
+       </li>
+       <li>
+        <a href="https://www.linkedin.com/in/AdamGoga">
+         LinkedIn
+        </a>
+       </li>
+      </ul>
+     </div>
+     <figure class="portrait">
+      <img alt="Adam Goga" height="1549" src="assets/agoga_headshot.jpg" width="1170"/>
+     </figure>
+    </section>
+    <section aria-labelledby="background-title" class="content-section" id="background">
+     <div class="section-heading">
+      <h2 id="background-title">
+       Background
+      </h2>
+      <span aria-hidden="true" class="section-index">
+       01
+      </span>
+     </div>
+     <p>
+      I started in software engineering after earning a computer science degree at DigiPen in 2011, building games and educational software. I later returned to school to study applied physics and mathematics at Coastal Carolina University, graduating in 2020.
+     </p>
+     <p>
+      Along the way, a research internship at CU Boulder / HAO / LASP introduced me to stellar data analysis. My Ph.D. research at UC Davis has focused on semiconductor materials and solar cell degradation, bringing together physics, numerical modeling, and software development.
+     </p>
+    </section>
+    <section aria-labelledby="projects-title" class="content-section" id="projects">
+     <div class="section-heading">
+      <h2 id="projects-title">
+       Selected projects
+      </h2>
+      <span aria-hidden="true" class="section-index">
+       02
+      </span>
+     </div>
+     <article class="project">
+      <div aria-hidden="true" class="project-art pattern-art">
+       <div class="pattern-grid">
+       </div>
+      </div>
+      <div class="project-copy">
+       <p class="item-meta">
+        2025-present
+       </p>
+       <h3>
+        <a href="https://github.com/agoga/H-trap-diff">
+         Hydrogen transport model
+        </a>
+       </h3>
+       <p>
+        I co-developed a model of hydrogen diffusion, trapping, and release in layered silicon solar cells. A redesigned numerical formulation reduced runtime by over 40,000 times, making large parameter sweeps practical.
+       </p>
+       <ul aria-label="Project methods" class="tags">
+        <li>
+         Reaction-diffusion
+        </li>
+        <li>
+         Python
+        </li>
+        <li>
+         HPC
+        </li>
+       </ul>
+       <a class="project-link" href="https://github.com/agoga/H-trap-diff">
+        GitHub
+        <span aria-hidden="true">
+         ↗
+        </span>
+       </a>
+      </div>
+     </article>
+     <article class="project">
+      <div aria-hidden="true" class="project-art data-art">
+       <div class="bars">
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+       </div>
+      </div>
+      <div class="project-copy">
+       <p class="item-meta">
+        2024-2025
+       </p>
+       <h3>
+        Solar cell device modeling
+       </h3>
+       <p>
+        I used SCAPS-1D and ASA simulations to connect atomic-scale defects to voltage loss in silicon heterojunction solar cells, automating simulations and analysis to study carrier recombination and band bending.
+       </p>
+       <ul aria-label="Project methods" class="tags">
+        <li>
+         TCAD
+        </li>
+        <li>
+         Semiconductors
+        </li>
+       </ul>
+      </div>
+     </article>
+     <article class="project">
+      <div aria-hidden="true" class="project-art field-art">
+       <div class="orbits">
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+       </div>
+      </div>
+      <div class="project-copy">
+       <p class="item-meta">
+        2023-2025
+       </p>
+       <h3>
+        <a href="https://github.com/agoga/TOPCON-MD">
+         High-throughput atomistic simulations
+        </a>
+       </h3>
+       <p>
+        I built a Python/LAMMPS workflow to test an oxygen-transport explanation for solar cell degradation. The pipeline automated thousands of calculations, recovered failed runs, and combined the results for analysis.
+       </p>
+       <ul aria-label="Project methods" class="tags">
+        <li>
+         Molecular dynamics
+        </li>
+        <li>
+         Python / C++
+        </li>
+        <li>
+         HPC
+        </li>
+       </ul>
+       <a class="project-link" href="https://github.com/agoga/TOPCON-MD">
+        GitHub
+        <span aria-hidden="true">
+         ↗
+        </span>
+       </a>
+      </div>
+     </article>
+     <article class="project">
+      <div aria-hidden="true" class="project-art pattern-art">
+       <div class="pattern-grid">
+       </div>
+      </div>
+      <div class="project-copy">
+       <p class="item-meta">
+        2024
+       </p>
+       <h3>
+        Machine-learning interatomic potentials
+       </h3>
+       <p>
+        I built a MACE/PyTorch workflow to explore faster atomistic simulations, preparing DFT datasets and training initial models for silicon, oxygen, and hydrogen systems.
+       </p>
+       <ul aria-label="Project methods" class="tags">
+        <li>
+         MACE
+        </li>
+        <li>
+         PyTorch
+        </li>
+        <li>
+         DFT
+        </li>
+       </ul>
+      </div>
+     </article>
+     <article class="project">
+      <div aria-hidden="true" class="project-art data-art">
+       <div class="bars">
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+       </div>
+      </div>
+      <div class="project-copy">
+       <p class="item-meta">
+        2021-2023
+       </p>
+       <h3>
+        Quantum transport modeling
+       </h3>
+       <p>
+        I optimized transfer-matrix simulations of disordered quantum-dot materials. Restructuring the linear algebra and reducing overhead made it possible to study systems about 30% larger in comparable runtime.
+       </p>
+       <ul aria-label="Project methods" class="tags">
+        <li>
+         Quantum transport
+        </li>
+        <li>
+         Numerical optimization
+        </li>
+       </ul>
+      </div>
+     </article>
+     <article class="project">
+      <div aria-hidden="true" class="project-art field-art">
+       <div class="orbits">
+        <i>
+        </i>
+        <i>
+        </i>
+        <i>
+        </i>
+       </div>
+      </div>
+      <div class="project-copy">
+       <p class="item-meta">
+        2019
+       </p>
+       <h3>
+        <a href="https://github.com/agoga/nreshk">
+         Stellar spectral analysis
+        </a>
+       </h3>
+       <p>
+        I built an open-source Python pipeline to turn stellar spectra into time series of magnetic activity. The workflow includes quality checks and diagnostic plots, with results validated against the original Fortran calculations.
+       </p>
+       <ul aria-label="Project methods" class="tags">
+        <li>
+         Python
+        </li>
+        <li>
+         Astronomy
+        </li>
+        <li>
+         Data analysis
+        </li>
+       </ul>
+       <a class="project-link" href="https://github.com/agoga/nreshk">
+        GitHub
+        <span aria-hidden="true">
+         ↗
+        </span>
+       </a>
+      </div>
+     </article>
+    </section>
+    <section aria-labelledby="publications-title" class="content-section" id="publications">
+     <div class="section-heading">
+      <h2 id="publications-title">
+       Publications
+      </h2>
+      <span aria-hidden="true" class="section-index">
+       03
+      </span>
+     </div>
+     <p class="section-description">
+      <a href="https://scholar.google.com/citations?user=UmfeNnkAAAAJ">
+       Full list on Google Scholar
+      </a>
+     </p>
+     <ol class="publication-list">
+      <li>
+       <span class="publication-year">
+        2026
+       </span>
+       <div>
+        <h3>
+         Understanding Hydrogen Induced J
+         <sub>
+          0
+         </sub>
+         Dynamics in n-TOPCon Contacts: Moving Beyond Kinetic Models
+        </h3>
+        <p>
+         A. Ratnapagol,
+         <strong>
+          A. Goga
+         </strong>
+         , Z. Zhao, D. Young, G. Zimanyi, S. Agarwal
+        </p>
+        <p class="venue">
+         Preparing for submission - Co-first author
+        </p>
+       </div>
+      </li>
+      <li>
+       <span class="publication-year">
+        2025
+       </span>
+       <div>
+        <h3>
+         Critical Transport Behavior in Quantum Dot Solids
+        </h3>
+        <p>
+         <strong>
+          A. Goga
+         </strong>
+         , Z. Crawford, M. Kovtun, G. Zimanyi
+        </p>
+        <p class="venue">
+         arXiv:2506.03676 - Co-first authors: A. Goga and Z. Crawford
+        </p>
+       </div>
+      </li>
+      <li>
+       <span class="publication-year">
+        2025
+       </span>
+       <div>
+        <h3>
+         Fermi Level and Light Driven Defect Generation in Silicon Solar Cells
+        </h3>
+        <p>
+         A. Diggs, Z. Zhao,
+         <strong>
+          A. Goga
+         </strong>
+         , Z. Crawford, G. Zimanyi
+        </p>
+        <p class="venue">
+         arXiv:2501.06667
+        </p>
+       </div>
+      </li>
+      <li>
+       <span class="publication-year">
+        2025
+       </span>
+       <div>
+        <h3>
+         The Fermi-Level Dependence of Hydrogen Dynamics and Its Effects on Degradation of Silicon Heterojunction Solar Cells
+        </h3>
+        <p>
+         <strong>
+          A. Goga
+         </strong>
+         , Z. Zhao, A. Diggs, Z. Crawford, G. Zimanyi
+        </p>
+        <p class="venue">
+         Photovoltaic Specialists Conference - Poster
+        </p>
+       </div>
+      </li>
+      <li>
+       <span class="publication-year">
+        2024
+       </span>
+       <div>
+        <h3>
+         Pinhole Formation by Nucleation-Driven Phase Separation in TOPCon and POLO Solar Cells: Structural Dynamics and Optimization
+        </h3>
+        <p>
+         A. Diggs, Z. Crawford,
+         <strong>
+          A. Goga
+         </strong>
+         , Z. Zhao, J. Stuckelberger, G. Zimanyi
+        </p>
+        <p class="venue">
+         ACS Applied Energy Materials, 7
+        </p>
+       </div>
+      </li>
+     </ol>
+    </section>
+   </main>
+   <footer>
+    <span>
+     Adam Goga
+     <span aria-hidden="true">
+      ·
+     </span>
+     Scientific portfolio
+    </span>
+    <a href="#about">
+     Back to top
+     <span aria-hidden="true">
+      ↑
+     </span>
+    </a>
+   </footer>
   </div>
-</body>
+ </body>
 </html>

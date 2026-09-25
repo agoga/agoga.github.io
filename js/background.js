@@ -7,18 +7,17 @@ const SETTINGS = {
   diffusionA: 1,
   diffusionB: 0.5,
   timestep: 1,
-  stepsPerSecond: 120,
-  maxStepsPerFrame: 8,
-  simulationLongEdge: 384,
-  displayLongEdge: 1600,
-  sourceLongEdge: 320,
+  stepsPerSecond: 500,
+  simulationLongEdge: 768,
+  sourceLongEdge: 768,
   sourceInterval: 250,
-  sourceStrength: 0.0015,
+  sourceStrength: 0.01,
   initialSourceStrength: 0.5,
-  opacity: 0.45,
-  centerOpacity: 0.8,
-  color: [0.38, 0.53, 0.43],
+  opacity: 0.5,
+  color: [185 / 255, 203 / 255, 194 / 255], // #B9CBC2, including at full opacity.
 };
+
+const DEFAULTS = Object.freeze({ ...SETTINGS });
 
 const vertex = `#version 300 es
 precision highp float;
@@ -64,11 +63,10 @@ void main() {
 
 const display = fragmentHeader + `
 uniform vec3 ink;
-uniform float opacity, centerOpacity;
+uniform float opacity;
 void main() {
   float b = texture(state, uv).g;
-  float alpha = smoothstep(0.03, 0.32, b) * opacity;
-  alpha *= mix(centerOpacity, 1.0, smoothstep(0.15, 0.48, abs(uv.x - 0.5)));
+  float alpha = clamp(b / 0.32, 0.0, 1.0) * opacity;
   result = vec4(ink * alpha, alpha);
 }`;
 
@@ -116,7 +114,6 @@ class Simulation {
       this.sourceReady = false;
       gl.useProgram(this.displayProgram);
       gl.uniform3fv(gl.getUniformLocation(this.displayProgram, 'ink'), SETTINGS.color);
-      gl.uniform1f(gl.getUniformLocation(this.displayProgram, 'centerOpacity'), SETTINGS.centerOpacity);
       this.applySettings();
       this.resize();
     } catch (error) {
@@ -153,6 +150,12 @@ class Simulation {
 
   applySettings() {
     const gl = this.gl;
+    // Keep explicit Euler nonnegative for normalized concentrations even when
+    // diffusion/feed/kill exceed the old UI ranges. Rendering speed is separate.
+    SETTINGS.timestep = Math.min(1, 0.9 / Math.max(
+      SETTINGS.diffusionA + 1 + SETTINGS.feed,
+      SETTINGS.diffusionB + SETTINGS.feed + SETTINGS.kill,
+    ));
     gl.useProgram(this.updateProgram);
     gl.uniform2f(gl.getUniformLocation(this.updateProgram, 'diffusion'), SETTINGS.diffusionA, SETTINGS.diffusionB);
     for (const name of ['feed', 'kill', 'timestep']) {
@@ -209,7 +212,8 @@ class Simulation {
         this.release(oldBack);
       }
     }
-    const displayScale = Math.min(window.devicePixelRatio || 1, SETTINGS.displayLongEdge / Math.max(width, height));
+    const displayLimit = Math.min(this.gl.getParameter(this.gl.MAX_RENDERBUFFER_SIZE), ...this.gl.getParameter(this.gl.MAX_VIEWPORT_DIMS));
+    const displayScale = Math.min(window.devicePixelRatio || 1, displayLimit / Math.max(width, height));
     const displayWidth = Math.max(1, Math.round(width * displayScale));
     const displayHeight = Math.max(1, Math.round(height * displayScale));
     if (this.canvas.width !== displayWidth || this.canvas.height !== displayHeight) {
@@ -280,7 +284,6 @@ const canvas = document.querySelector('#reaction-background');
 const button = document.querySelector('#animation-toggle');
 const controls = document.querySelector('#simulation-controls');
 const form = document.querySelector('#simulation-parameters');
-const status = document.querySelector('#simulation-status');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let simulation;
 let pageSource;
@@ -293,28 +296,65 @@ let needsResize = true;
 let restartTimer = 0;
 
 const parameters = [
-  ['feed', 'Feed', 0, 0.1, 0.001],
-  ['kill', 'Kill', 0, 0.1, 0.001],
-  ['diffusionA', 'Diffusion A', 0, 1, 0.05],
-  ['diffusionB', 'Diffusion B', 0, 1, 0.05],
-  ['stepsPerSecond', 'Speed (steps/s)', 10, 240, 10],
-  ['opacity', 'Opacity', 0, 1, 0.05],
-  ['initialSourceStrength', 'Initial B strength', 0, 1, 0.05],
-  ['sourceStrength', 'Page input', 0, 0.01, 0.0005],
-  ['simulationLongEdge', 'Resolution (px)', 128, 768, 32],
+  ['feed', 'Feed (f)', 0],
+  ['kill', 'Kill (k)', 0],
+  ['diffusionA', 'Diffusion A', 0],
+  ['diffusionB', 'Diffusion B', 0],
+  ['stepsPerSecond', 'Speed (steps/sec)', 0],
+  ['opacity', 'Opacity', 0, 1],
+  ['initialSourceStrength', 'Initial B strength (B\u2080)', 0, 1],
+  ['sourceStrength', 'Page input strength (s)', 0],
+  ['simulationLongEdge', 'Simulation size (pixels)', 2, undefined, 1],
+  ['sourceLongEdge', 'Snapshot size (pixels)', 2, undefined, 1],
+  ['sourceInterval', 'Capture interval (ms)', 0],
 ];
-for (const [name, title, min, max, step] of parameters) {
+const parameterDescriptions = {
+  feed: 'Rate of replenishing A.',
+  kill: 'Additional rate of removing B.',
+  diffusionA: 'How quickly A spreads.',
+  diffusionB: 'How quickly B spreads.',
+  stepsPerSecond: 'Solver steps per second.',
+  opacity: 'Pattern visibility, 0 to 1.',
+  initialSourceStrength: 'How much B the starting snapshot creates.',
+  sourceStrength: 'Continuous B input from page.',
+  simulationLongEdge: 'Grid size along its longest side.',
+  sourceLongEdge: 'Snapshot detail along its longest side.',
+  sourceInterval: 'Minimum time between captures; lower updates faster.',
+};
+for (const [name, title, min, max, step = 'any'] of parameters) {
   const label = document.createElement('label');
-  label.textContent = title;
+  const titleElement = document.createElement('span');
+  titleElement.id = `${name}-label`;
+  titleElement.textContent = title;
+  if (name === 'diffusionA' || name === 'diffusionB') {
+    titleElement.textContent = `Diffusion ${name.at(-1)} (D`;
+    const subscript = document.createElement('sub');
+    subscript.textContent = name.at(-1);
+    titleElement.append(subscript, ')');
+  }
   const input = document.createElement('input');
-  Object.assign(input, { type: 'number', name, min, max, step, value: SETTINGS[name], required: true });
-  label.append(input);
+  Object.assign(input, { type: 'number', name, min, step, value: SETTINGS[name], required: true });
+  if (max !== undefined) input.max = max;
+  const description = document.createElement('small');
+  description.id = `${name}-description`;
+  description.textContent = parameterDescriptions[name];
+  input.setAttribute('aria-labelledby', titleElement.id);
+  input.setAttribute('aria-describedby', description.id);
+  label.append(titleElement, input, description);
   form.append(label);
+}
+
+function validParameters() {
+  for (const input of form.elements) {
+    input.setCustomValidity(Number.isFinite(Math.fround(input.valueAsNumber)) ? '' : 'Enter a finite number supported by the simulation.');
+  }
+  return form.checkValidity();
 }
 
 function restart() {
   clearTimeout(restartTimer);
-  if (failed || reducedMotion.matches || !form.reportValidity()) return;
+  if (failed || reducedMotion.matches) return;
+  if (!validParameters()) { form.reportValidity(); return; }
   for (const [name] of parameters) SETTINGS[name] = form.elements.namedItem(name).valueAsNumber;
   stop();
   pageSource?.dispose();
@@ -325,20 +365,35 @@ function restart() {
     simulation.applySettings();
   }
   needsResize = true;
-  status.textContent = 'Capturing page...';
   sync();
 }
 
 form.addEventListener('submit', event => { event.preventDefault(); restart(); });
 form.addEventListener('input', () => {
   clearTimeout(restartTimer);
-  if (!form.checkValidity()) { sync(); return; }
+  if (!validParameters()) { sync(); return; }
   stop();
   pageSource?.setActive(false);
-  status.textContent = 'Capturing page...';
   restartTimer = setTimeout(restart, 200);
 });
 document.querySelector('#simulation-restart').addEventListener('click', restart);
+document.querySelector('#simulation-defaults').addEventListener('click', () => {
+  for (const [name] of parameters) form.elements.namedItem(name).value = DEFAULTS[name];
+  restart();
+});
+document.querySelector('#simulation-collapse').addEventListener('click', event => {
+  const details = document.querySelector('#simulation-details');
+  details.hidden = !details.hidden;
+  const toggle = event.currentTarget;
+  const label = details.hidden ? 'Expand simulation controls' : 'Minimize simulation controls';
+  toggle.setAttribute('aria-expanded', String(!details.hidden));
+  toggle.setAttribute('aria-label', label);
+  toggle.title = label;
+  toggle.querySelector('[aria-hidden]').textContent = details.hidden ? '+' : '\u2212';
+  toggle.querySelector('.button-label').textContent = label;
+  // Collapsing moves the content even though its own dimensions stay the same.
+  pageSource?.invalidate();
+});
 
 function stop() {
   cancelAnimationFrame(frame);
@@ -368,11 +423,13 @@ function tick(now) {
     }
     const elapsed = previousTime === null ? 0 : (now - previousTime) / 1000;
     previousTime = now;
-    // Fixed solver steps, capped backlog: no resume burst or refresh-rate speedup.
-    accumulator = Math.min(accumulator + elapsed * SETTINGS.stepsPerSecond, SETTINGS.maxStepsPerFrame);
+    // No fixed step-count cap. Yield after a short CPU budget so very high
+    // requested speeds cannot lock up the controls. Drop unserved backlog.
+    accumulator += elapsed * SETTINGS.stepsPerSecond;
     const steps = Math.floor(accumulator);
-    for (let i = 0; i < steps; i++) simulation.step();
-    accumulator -= steps;
+    const deadline = performance.now() + 8;
+    for (let i = 0; i < steps && performance.now() < deadline; i++) simulation.step();
+    accumulator %= 1;
     simulation.render();
     frame = requestAnimationFrame(tick);
   } catch (error) { fail(error); }
@@ -386,7 +443,12 @@ function sync() {
   controls.hidden = failed || reducedMotion.matches;
   if (failed || reducedMotion.matches || document.hidden) return;
   try {
-    if (!simulation) simulation = new Simulation(canvas);
+    if (!simulation) {
+      simulation = new Simulation(canvas);
+      const gl = simulation.gl;
+      form.elements.namedItem('simulationLongEdge').max = Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), ...gl.getParameter(gl.MAX_VIEWPORT_DIMS));
+      form.elements.namedItem('sourceLongEdge').max = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+    }
     if (!pageSource) {
       pageSource = new PageSource({
         longEdge: SETTINGS.sourceLongEdge,
@@ -396,7 +458,6 @@ function sync() {
           canvas.hidden = false;
           button.hidden = false;
           simulation.render();
-          status.textContent = paused ? 'Paused' : 'Running';
           if (paused) pageSource.setActive(false);
           else if (!frame) frame = requestAnimationFrame(tick);
         },
@@ -404,13 +465,12 @@ function sync() {
         onError: error => {
           if (!simulation?.initialized) { fail(error); return; }
           if (simulation) simulation.sourceReady = false;
-          status.textContent = 'Page input unavailable';
           console.warn('Page influence disabled; background continues:', error);
         },
       });
     }
-    button.textContent = paused ? 'Resume background' : 'Pause background';
-    status.textContent = !simulation.initialized ? 'Capturing page...' : paused ? 'Paused' : 'Running';
+    button.querySelector('[aria-hidden]').textContent = paused ? '\u25b6' : '\u25a0';
+    button.querySelector('.button-label').textContent = paused ? 'Play background' : 'Stop background (Esc)';
     if (needsResize) {
       simulation.resize();
       needsResize = false;
@@ -424,6 +484,11 @@ function sync() {
 }
 
 button.addEventListener('click', () => { paused = !paused; sync(); });
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || paused) return;
+  paused = true;
+  sync();
+});
 document.addEventListener('visibilitychange', sync);
 reducedMotion.addEventListener('change', sync);
 window.addEventListener('resize', () => { needsResize = true; if (paused) sync(); }, { passive: true });

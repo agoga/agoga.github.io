@@ -7,10 +7,12 @@ A static HTML/CSS portfolio prepared for GitHub Pages. The page contains Adam Go
 From this folder, run:
 
 ```sh
-python -m http.server 8000 --bind 127.0.0.1
+python -m http.server 8001 --bind 127.0.0.1
 ```
 
-Open http://127.0.0.1:8000. Stop the server with Ctrl+C.
+Open http://127.0.0.1:8001. Stop the server with Ctrl+C.
+
+Local development is the default. Do not publish changes unless explicitly requested.
 
 ## Publish on GitHub Pages
 
@@ -35,7 +37,7 @@ The canvas stays behind the HTML and ignores pointer input. The top simulation p
 
 The first accepted viewport snapshot initializes both simulation buffers: B is 0.5 times inverse luminance and A is 1 minus B. There are no scattered seeds, and the animation waits for this snapshot before starting. Subsequent captures provide only a weak continuous source of species B. `js/page-source.js` captures the viewport on load, scroll, resize, font/image completion, and content changes. White space contributes zero; darker content contributes more. The animation canvas and its control are excluded.
 
-Capture is capped at a 320-pixel long edge and starts no more often than every 250 ms. Only one capture runs at a time; stale results are rejected and scrolling never resets the simulation. Pause, hidden tabs, and reduced motion stop capture scheduling. An already-running capture may finish, but its result is discarded. If the first capture fails, the portfolio stays static. After initialization, rasterization failure disables page influence while the existing animation continues.
+Capture defaults to a 768-pixel long edge and a 250 ms minimum interval; both are adjustable. Only one capture runs at a time; stale results are rejected and scrolling never resets the simulation. Pause, hidden tabs, and reduced motion stop capture scheduling. An already-running capture may finish, but its result is discarded. If the first capture fails, the portfolio stays static. After initialization, rasterization failure disables page influence while the existing animation continues.
 
 Tune `initialSourceStrength`, `sourceLongEdge`, `sourceInterval`, and `sourceStrength` in `SETTINGS`. html2canvas 1.4.1 loads only when needed from `js/vendor/`; its MIT license is included alongside it. There is no runtime CDN request. Mouse interaction remains the next step in `project_plan.md`.
 
@@ -47,4 +49,6 @@ Page-source checks: viewport-corner alignment before/after scrolling, white-spac
 
 The top panel exposes feed, kill, diffusion A/B, speed, opacity, initial B strength, continuous page input, and simulation resolution. Valid edits restart after a 200 ms typing delay, capturing the current viewport again and initializing both state buffers. Changes do not reuse an old snapshot. Restart from page repeats the capture without changing parameters; when paused, it displays the new initial state without advancing it. Controls are omitted from captures while preserving their layout space. Values reset to defaults on reload.
 
-Default opacity is 0.45 with less fading behind the content for easier inspection. The panel is hidden when JavaScript/WebGL is unavailable, under reduced motion, and when printing.
+Default opacity is 0.45 with no center fade or low-concentration visibility cutoff. The panel is hidden when JavaScript/WebGL is unavailable, under reduced motion, and when printing.
+
+Local tuning: rates, diffusion, page input, and speed have no arbitrary upper bound or decimal increment. Zero speed freezes evolution. Opacity and initial B stay in [0, 1], rates stay nonnegative, and image dimensions must be whole pixels within GPU limits. The solver reduces its numerical timestep for larger diffusion/reaction rates. Speed counts numerical steps, so a smaller timestep slows simulated-time progression at the same step rate. A per-frame CPU submission budget keeps extreme speeds from blocking the controls; attainable speed still depends on hardware. Display resolution uses device pixel ratio up to GPU dimensions rather than a 1600-pixel cap.

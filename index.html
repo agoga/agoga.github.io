@@ -6,20 +6,27 @@
     <meta content="Adam Goga - computational physicist and software engineer working on semiconductor materials, solar cells, and scientific computing." name="description"/>
     <title>Adam Goga - Computational Physics</title>
     <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
-    <link href="styles.css" rel="stylesheet"/>
+    <link href="styles.css?v=sticky-controls-2" rel="stylesheet"/>
   </head>
   <body>
     <canvas id="reaction-background" aria-hidden="true" hidden></canvas>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-shell">
       <section id="simulation-controls" aria-labelledby="simulation-title" hidden>
-        <h2 id="simulation-title">Simulation</h2>
-        <p>Changing a value restarts the pattern from the visible page.</p>
-        <form id="simulation-parameters" aria-label="Simulation parameters"></form>
+        <div id="simulation-details" hidden>
+          <h2 id="simulation-title">Simulation</h2>
+          <p>This page runs a Gray-Scott reaction-diffusion simulation in the background described by equations (1) and (2). The visible webpage continuously feeds the pattern, and moving your mouse adds local disturbances.</p>
+          <div class="model-equations" aria-label="Gray-Scott equations with page input">
+            <div>(1) &part;A/&part;t = D<sub>A</sub>&nabla;<sup>2</sup>A &minus; AB<sup>2</sup> + f(1 &minus; A)</div>
+            <div>(2) &part;B/&part;t = D<sub>B</sub>&nabla;<sup>2</sup>B + AB<sup>2</sup> &minus; (f + k)B + sP(x, y, t)</div>
+          </div>
+          <form id="simulation-parameters" aria-label="Simulation parameters"></form>
+        </div>
         <div class="simulation-actions">
-          <button id="animation-toggle" type="button" hidden>Pause background</button>
+          <button id="animation-toggle" type="button" hidden><span aria-hidden="true">&#9632;</span> <span class="button-label">Stop background(Esc)</span></button>
           <button id="simulation-restart" type="button">Restart from page</button>
-          <span id="simulation-status" role="status"></span>
+          <button id="simulation-defaults" type="button">Reset to defaults</button>
+          <button id="simulation-collapse" type="button" aria-expanded="false" aria-controls="simulation-details"><span aria-hidden="true">+</span> <span class="button-label">Expand simulation controls</span></button>
         </div>
       </section>
       <main id="main">

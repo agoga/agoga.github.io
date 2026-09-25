@@ -12,6 +12,7 @@ const SETTINGS = {
   sourceLongEdge: 768,
   sourceInterval: 250,
   sourceStrength: 0.01,
+  mouseRadius: 30,
   initialSourceStrength: 0.5,
   opacity: 0.5,
   color: [185 / 255, 203 / 255, 194 / 255], // #B9CBC2, including at full opacity.
@@ -40,6 +41,8 @@ uniform vec2 diffusion;
 uniform float feed, kill, timestep;
 uniform sampler2D pageSource;
 uniform float sourceStrength;
+uniform vec2 mousePosition, viewportSize;
+uniform float mouseRadius, mouseStrength;
 vec2 sampleAt(ivec2 offset) {
   ivec2 size = textureSize(state, 0);
   ivec2 p = clamp(ivec2(gl_FragCoord.xy) + offset, ivec2(0), size - 1);
@@ -58,6 +61,11 @@ void main() {
                                        reaction - (feed+kill) * c.y);
   float source = 1.0 - dot(texture(pageSource, uv).rgb, vec3(0.2126, 0.7152, 0.0722));
   change.y += sourceStrength * clamp(source, 0.0, 1.0);
+  if (mouseRadius > 0.0 && mouseStrength > 0.0) {
+    float distance = length((uv - mousePosition) * viewportSize);
+    float brush = 1.0 - smoothstep(0.0, mouseRadius, distance);
+    change.y += mouseStrength * brush;
+  }
   result = vec4(clamp(c + timestep * change, 0.0, 1.0), 0.0, 1.0);
 }`;
 
@@ -111,6 +119,8 @@ class Simulation {
       gl.useProgram(this.updateProgram);
       gl.uniform1i(gl.getUniformLocation(this.updateProgram, 'pageSource'), 1);
       this.sourceStrengthLocation = gl.getUniformLocation(this.updateProgram, 'sourceStrength');
+      this.mouseUniforms = Object.fromEntries(['mousePosition', 'viewportSize', 'mouseRadius', 'mouseStrength']
+        .map(name => [name, gl.getUniformLocation(this.updateProgram, name)]));
       this.sourceReady = false;
       gl.useProgram(this.displayProgram);
       gl.uniform3fv(gl.getUniformLocation(this.displayProgram, 'ink'), SETTINGS.color);
@@ -237,6 +247,10 @@ class Simulation {
     const gl = this.gl;
     gl.useProgram(this.updateProgram);
     gl.uniform1f(this.sourceStrengthLocation, this.sourceReady ? SETTINGS.sourceStrength : 0);
+    gl.uniform2f(this.mouseUniforms.mousePosition, pointer.x / innerWidth, 1 - pointer.y / innerHeight);
+    gl.uniform2f(this.mouseUniforms.viewportSize, innerWidth, innerHeight);
+    gl.uniform1f(this.mouseUniforms.mouseRadius, SETTINGS.mouseRadius);
+    gl.uniform1f(this.mouseUniforms.mouseStrength, performance.now() < pointer.expires ? SETTINGS.sourceStrength : 0);
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
     this.draw(this.updateProgram, this.front, this.back);
@@ -294,32 +308,35 @@ let paused = false;
 let failed = false;
 let needsResize = true;
 let restartTimer = 0;
+const pointer = { x: 0, y: 0, expires: 0 };
 
 const parameters = [
-  ['feed', 'Feed (f)', 0],
-  ['kill', 'Kill (k)', 0],
+  ['feed', 'Feed (f)', 0, undefined, 0.05],
+  ['kill', 'Kill (k)', 0, undefined, 0.05],
   ['diffusionA', 'Diffusion A', 0],
   ['diffusionB', 'Diffusion B', 0],
-  ['stepsPerSecond', 'Speed (steps/sec)', 0],
-  ['opacity', 'Opacity', 0, 1],
-  ['initialSourceStrength', 'Initial B strength (B\u2080)', 0, 1],
-  ['sourceStrength', 'Page input strength (s)', 0],
-  ['simulationLongEdge', 'Simulation size (pixels)', 2, undefined, 1],
-  ['sourceLongEdge', 'Snapshot size (pixels)', 2, undefined, 1],
-  ['sourceInterval', 'Capture interval (ms)', 0],
+  ['stepsPerSecond', 'Speed (steps/sec)', 0, undefined, 100],
+  ['opacity', 'Opacity', 0, 1, 0.05],
+  ['initialSourceStrength', 'Initial B strength (B\u2080)', 0, undefined],
+  ['sourceStrength', 'Input strength (s)', 0,undefined,.01],
+  ['mouseRadius', 'Mouse radius (pixels)', 0, undefined, 10],
+  ['simulationLongEdge', 'Sim size (pixels)', 2, undefined, 10],
+  ['sourceLongEdge', 'Snapshot size (pixels)', 2, undefined, 110],
+  ['sourceInterval', 'Capture interval (ms)', 0,undefined,50],
 ];
 const parameterDescriptions = {
   feed: 'Rate of replenishing A.',
-  kill: 'Additional rate of removing B.',
+  kill: 'Rate of removing B.',
   diffusionA: 'How quickly A spreads.',
   diffusionB: 'How quickly B spreads.',
   stepsPerSecond: 'Solver steps per second.',
   opacity: 'Pattern visibility, 0 to 1.',
   initialSourceStrength: 'How much B the starting snapshot creates.',
-  sourceStrength: 'Continuous B input from page.',
+  sourceStrength: 'B input from page and mouse movement.',
+  mouseRadius: 'Brush radius in screen pixels.',
   simulationLongEdge: 'Grid size along its longest side.',
   sourceLongEdge: 'Snapshot detail along its longest side.',
-  sourceInterval: 'Minimum time between captures; lower updates faster.',
+  sourceInterval: 'Minimum time between captures; lower is faster.',
 };
 for (const [name, title, min, max, step = 'any'] of parameters) {
   const label = document.createElement('label');
@@ -385,7 +402,7 @@ document.querySelector('#simulation-collapse').addEventListener('click', event =
   const details = document.querySelector('#simulation-details');
   details.hidden = !details.hidden;
   const toggle = event.currentTarget;
-  const label = details.hidden ? 'Expand simulation controls' : 'Minimize simulation controls';
+  const label = details.hidden ? 'Expand controls' : 'Minimize simulation controls';
   toggle.setAttribute('aria-expanded', String(!details.hidden));
   toggle.setAttribute('aria-label', label);
   toggle.title = label;
@@ -396,6 +413,7 @@ document.querySelector('#simulation-collapse').addEventListener('click', event =
 });
 
 function stop() {
+  pointer.expires = 0;
   cancelAnimationFrame(frame);
   frame = 0;
   previousTime = null;
@@ -484,6 +502,20 @@ function sync() {
 }
 
 button.addEventListener('click', () => { paused = !paused; sync(); });
+document.addEventListener('pointermove', event => {
+  if (event.pointerType === 'touch' || paused || failed || reducedMotion.matches
+      || event.target.closest('#simulation-controls')) {
+    pointer.expires = 0;
+    return;
+  }
+  if (event.clientX === pointer.x && event.clientY === pointer.y) return;
+  pointer.x = event.clientX;
+  pointer.y = event.clientY;
+  pointer.expires = performance.now() + 100;
+}, { passive: true });
+document.documentElement.addEventListener('pointerleave', () => { pointer.expires = 0; });
+document.addEventListener('pointercancel', () => { pointer.expires = 0; });
+window.addEventListener('blur', () => { pointer.expires = 0; });
 document.addEventListener('keydown', event => {
   if (event.key !== 'Escape' || paused) return;
   paused = true;

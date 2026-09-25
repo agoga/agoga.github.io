@@ -451,7 +451,7 @@ footer a {
   z-index: 2;
   max-height: calc(100vh - 24px);
   max-height: calc(100dvh - 24px);
-  margin-top: 24px;
+  margin-top: 12px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 4px;
@@ -468,6 +468,7 @@ footer a {
 .model-equations > div { overflow-wrap: anywhere; }
 #simulation-parameters { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
 #simulation-parameters label { display: grid; grid-template-rows: auto auto 1fr; align-content: start; gap: 4px; font-size: 12px; }
+#simulation-parameters label > span { font-weight: 700; }
 #simulation-parameters small { font-size: 11px; line-height: 1.4; }
 #simulation-parameters input {
   width: 100%;
@@ -485,5 +486,7 @@ footer a {
 .simulation-actions button { border: 0; padding: 0; background: none; color: var(--accent); font: inherit; cursor: pointer; }
 .simulation-actions button:hover { text-decoration: underline; }
 #simulation-details[hidden] + .simulation-actions { margin-top: 0; }
+#simulation-details[hidden] + .simulation-actions #simulation-restart,
+#simulation-details[hidden] + .simulation-actions #simulation-defaults { display: none; }
 #simulation-collapse { margin-left: auto; }
 #simulation-collapse:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

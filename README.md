@@ -39,7 +39,7 @@ The first accepted viewport snapshot initializes both simulation buffers: B is 0
 
 Capture defaults to a 768-pixel long edge and a 250 ms minimum interval; both are adjustable. Only one capture runs at a time; stale results are rejected and scrolling never resets the simulation. Pause, hidden tabs, and reduced motion stop capture scheduling. An already-running capture may finish, but its result is discarded. If the first capture fails, the portfolio stays static. After initialization, rasterization failure disables page influence while the existing animation continues.
 
-Tune `initialSourceStrength`, `sourceLongEdge`, `sourceInterval`, and `sourceStrength` in `SETTINGS`. html2canvas 1.4.1 loads only when needed from `js/vendor/`; its MIT license is included alongside it. There is no runtime CDN request. Mouse interaction remains the next step in `project_plan.md`.
+Tune `initialSourceStrength`, `sourceLongEdge`, `sourceInterval`, and `sourceStrength` in `SETTINGS`. html2canvas 1.4.1 loads only when needed from `js/vendor/`; its MIT license is included alongside it. There is no runtime CDN request. Mouse movement injects B through a soft circular brush using the same strength as page input. Mouse radius is in CSS pixels (default 30); zero disables the brush. Injection expires 100 ms after movement stops and clears on pointer exit, blur, stop, or cancellation. Touch gestures and movement over the controls do not inject.
 
 Validation: Chrome WebGL2 rendering, fixed 60/120 Hz timing, capped catch-up, pause/resume, visibility lifecycle, mobile/high-DPI resize, reduced motion at startup and runtime, context loss, and injected initialization failures. Safari, Firefox, and physical mobile GPU performance still need checking.
 

@@ -8,7 +8,7 @@
     <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
     <link href="styles.css?v=sticky-controls-2" rel="stylesheet"/>
   </head>
-  <body>
+  <body id="top">
     <canvas id="reaction-background" aria-hidden="true" hidden></canvas>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-shell">
@@ -18,7 +18,7 @@
           <p>This page runs a Gray-Scott reaction-diffusion simulation in the background described by equations (1) and (2). The visible webpage continuously feeds the pattern, and moving your mouse adds local disturbances.</p>
           <div class="model-equations" aria-label="Gray-Scott equations with page input">
             <div>(1) &part;A/&part;t = D<sub>A</sub>&nabla;<sup>2</sup>A &minus; AB<sup>2</sup> + f(1 &minus; A)</div>
-            <div>(2) &part;B/&part;t = D<sub>B</sub>&nabla;<sup>2</sup>B + AB<sup>2</sup> &minus; (f + k)B + sP(x, y, t)</div>
+            <div>(2) &part;B/&part;t = D<sub>B</sub>&nabla;<sup>2</sup>B + AB<sup>2</sup> &minus; (f + k)B + s[P(x, y, t) + M(x, y, t)]</div>
           </div>
           <form id="simulation-parameters" aria-label="Simulation parameters"></form>
         </div>
@@ -26,7 +26,7 @@
           <button id="animation-toggle" type="button" hidden><span aria-hidden="true">&#9632;</span> <span class="button-label">Stop background(Esc)</span></button>
           <button id="simulation-restart" type="button">Restart from page</button>
           <button id="simulation-defaults" type="button">Reset to defaults</button>
-          <button id="simulation-collapse" type="button" aria-expanded="false" aria-controls="simulation-details"><span aria-hidden="true">+</span> <span class="button-label">Expand simulation controls</span></button>
+          <button id="simulation-collapse" type="button" aria-expanded="false" aria-controls="simulation-details"><span aria-hidden="true">+</span> <span class="button-label">Expand controls</span></button>
         </div>
       </section>
       <main id="main">
@@ -151,7 +151,7 @@
       </main>
       <footer>
         <span> Adam Goga <span aria-hidden="true">·</span> Scientific portfolio </span>
-        <a href="#about"> Back to top <span aria-hidden="true">↑</span></a>
+        <a href="#top"> Back to top <span aria-hidden="true">↑</span></a>
       </footer>
     </div>
     <script type="module" src="js/background.js"></script>

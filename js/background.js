@@ -14,6 +14,7 @@ const SETTINGS = Object.freeze({
   sourceLongEdge: 320,
   sourceInterval: 250,
   sourceStrength: 0.0015,
+  initialSourceStrength: 0.5,
   opacity: 0.16,
   centerOpacity: 0.35,
   color: [0.38, 0.53, 0.43],
@@ -75,6 +76,14 @@ const copy = fragmentHeader + `
 void main() { result = vec4(texture(state, uv).rg, 0.0, 1.0); }
 `;
 
+const initialize = fragmentHeader + `
+uniform float initialSourceStrength;
+void main() {
+  float darkness = clamp(1.0 - dot(texture(state, uv).rgb, vec3(0.2126, 0.7152, 0.0722)), 0.0, 1.0);
+  float b = darkness * initialSourceStrength;
+  result = vec4(1.0 - b, b, 0.0, 1.0);
+}`;
+
 class Simulation {
   constructor(canvas) {
     this.canvas = canvas;
@@ -84,6 +93,7 @@ class Simulation {
     });
     this.programs = [];
     this.targets = new Set();
+    this.initialized = false;
     const gl = this.gl;
     try {
       if (!gl || !gl.getExtension('EXT_color_buffer_float')) {
@@ -92,6 +102,9 @@ class Simulation {
       this.updateProgram = this.program(evolution);
       this.displayProgram = this.program(display);
       this.copyProgram = this.program(copy);
+      this.initializeProgram = this.program(initialize);
+      gl.useProgram(this.initializeProgram);
+      gl.uniform1f(gl.getUniformLocation(this.initializeProgram, 'initialSourceStrength'), SETTINGS.initialSourceStrength);
       this.sourceTexture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -144,7 +157,7 @@ class Simulation {
     }
   }
 
-  target(width, height, data = null) {
+  target(width, height) {
     const gl = this.gl;
     const target = { texture: gl.createTexture(), framebuffer: gl.createFramebuffer(), width, height };
     this.targets.add(target);
@@ -153,7 +166,7 @@ class Simulation {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RG16F, width, height, 0, gl.RG, gl.FLOAT, data);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RG16F, width, height, 0, gl.RG, gl.FLOAT, null);
     gl.bindFramebuffer(gl.FRAMEBUFFER, target.framebuffer);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, target.texture, 0);
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
@@ -177,12 +190,14 @@ class Simulation {
     if (!this.front || this.front.width !== w || this.front.height !== h) {
       const oldFront = this.front;
       const oldBack = this.back;
-      this.front = this.target(w, h, oldFront ? null : this.seeds(w, h));
+      this.front = this.target(w, h);
       this.back = this.target(w, h);
       if (oldFront) {
         // Resample existing chemistry on resize; scrolling never touches state.
-        this.draw(this.copyProgram, oldFront, this.front);
-        this.draw(this.copyProgram, oldFront, this.back);
+        if (this.initialized) {
+          this.draw(this.copyProgram, oldFront, this.front);
+          this.draw(this.copyProgram, oldFront, this.back);
+        }
         this.release(oldFront);
         this.release(oldBack);
       }
@@ -196,28 +211,6 @@ class Simulation {
     }
   }
 
-  seeds(width, height) {
-    const data = new Float32Array(width * height * 2);
-    for (let i = 0; i < data.length; i += 2) data[i] = 1;
-    // Deterministic, scattered nuclei keep startup repeatable during tuning.
-    for (let n = 0; n < 36; n++) {
-      const x = Math.floor(((n * 0.61803398875 + 0.12) % 1) * width);
-      const y = Math.floor(((n * 0.41421356237 + 0.23) % 1) * height);
-      const radius = 3 + n % 4;
-      for (let dy = -radius; dy <= radius; dy++) {
-        for (let dx = -radius; dx <= radius; dx++) {
-          if (dx * dx + dy * dy > radius * radius) continue;
-          const px = x + dx, py = y + dy;
-          if (px < 0 || py < 0 || px >= width || py >= height) continue;
-          const i = 2 * (py * width + px);
-          data[i] = 0.5;
-          data[i + 1] = 0.25;
-        }
-      }
-    }
-    return data;
-  }
-
   draw(program, source, target = null) {
     const gl = this.gl;
     gl.bindFramebuffer(gl.FRAMEBUFFER, target?.framebuffer ?? null);
@@ -229,6 +222,7 @@ class Simulation {
   }
 
   step() {
+    if (!this.initialized) return;
     const gl = this.gl;
     gl.useProgram(this.updateProgram);
     gl.uniform1f(this.sourceStrengthLocation, this.sourceReady ? SETTINGS.sourceStrength : 0);
@@ -238,7 +232,9 @@ class Simulation {
     [this.front, this.back] = [this.back, this.front];
   }
 
-  render() { this.draw(this.displayProgram, this.front); }
+  render() {
+    if (this.initialized) this.draw(this.displayProgram, this.front);
+  }
 
   setSource(image) {
     const gl = this.gl;
@@ -252,6 +248,15 @@ class Simulation {
     } finally {
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
       gl.activeTexture(gl.TEXTURE0);
+    }
+    if (!this.initialized) {
+      // The first accepted viewport is the entire initial condition, not an overlay.
+      this.resize();
+      const source = { texture: this.sourceTexture };
+      this.draw(this.initializeProgram, source, this.front);
+      this.draw(this.initializeProgram, source, this.back);
+      if (gl.getError() !== gl.NO_ERROR) throw new Error('Page initialization failed');
+      this.initialized = true;
     }
   }
 
@@ -316,8 +321,8 @@ function tick(now) {
 function sync() {
   stop();
   pageSource?.setActive(false);
-  canvas.hidden = failed || reducedMotion.matches;
-  button.hidden = failed || reducedMotion.matches;
+  canvas.hidden = failed || reducedMotion.matches || !simulation?.initialized;
+  button.hidden = failed || reducedMotion.matches || !simulation?.initialized;
   if (failed || reducedMotion.matches || document.hidden) return;
   try {
     if (!simulation) simulation = new Simulation(canvas);
@@ -325,9 +330,16 @@ function sync() {
       pageSource = new PageSource({
         longEdge: SETTINGS.sourceLongEdge,
         interval: SETTINGS.sourceInterval,
-        onImage: image => simulation.setSource(image),
+        onImage: image => {
+          simulation.setSource(image);
+          canvas.hidden = false;
+          button.hidden = false;
+          simulation.render();
+          if (!frame) frame = requestAnimationFrame(tick);
+        },
         onInvalidate: () => { if (simulation) simulation.sourceReady = false; },
         onError: error => {
+          if (!simulation?.initialized) { fail(error); return; }
           if (simulation) simulation.sourceReady = false;
           console.warn('Page influence disabled; background continues:', error);
         },
@@ -341,7 +353,7 @@ function sync() {
     simulation.render();
     if (!paused) {
       pageSource.setActive(true);
-      frame = requestAnimationFrame(tick);
+      if (simulation.initialized) frame = requestAnimationFrame(tick);
     }
   } catch (error) { fail(error); }
 }

@@ -20,6 +20,17 @@ const SETTINGS = {
 
 const DEFAULTS = Object.freeze({ ...SETTINGS });
 
+// Code-only experiments: set ACTIVE_PRESET to a key below and reload.
+// These are starting points; continuous page input changes the resulting patterns.
+const PRESETS = {
+  pageTrace: { feed: 0.029, kill: 0.057, sourceStrength: 0.01 },
+  fineSpots: { feed: 0.035, kill: 0.065, sourceStrength: 0.0005 },
+  windingBands: { feed: 0.025, kill: 0.055, sourceStrength: 0.001 },
+  softWaves: { feed: 0.014, kill: 0.045, sourceStrength: 0.0005, opacity: 0.35 },
+};
+const ACTIVE_PRESET = null;
+if (ACTIVE_PRESET !== null) Object.assign(SETTINGS, PRESETS[ACTIVE_PRESET]);
+
 const vertex = `#version 300 es
 precision highp float;
 out vec2 uv;
@@ -297,6 +308,15 @@ class Simulation {
 const canvas = document.querySelector('#reaction-background');
 const button = document.querySelector('#animation-toggle');
 const controls = document.querySelector('#simulation-controls');
+// Anchor navigation and focused fields must clear the sticky controls, including
+// when wrapping or larger browser text changes the panel height.
+function updateScrollOffset() {
+  const sticky = getComputedStyle(controls).position === 'sticky' && !controls.hidden;
+  const offset = sticky ? controls.getBoundingClientRect().height + 24 : 24;
+  document.documentElement.style.setProperty('--controls-scroll-offset', `${offset}px`);
+}
+new ResizeObserver(updateScrollOffset).observe(controls);
+window.addEventListener('resize', updateScrollOffset, { passive: true });
 const form = document.querySelector('#simulation-parameters');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let simulation;
@@ -311,18 +331,18 @@ let restartTimer = 0;
 const pointer = { x: 0, y: 0, expires: 0 };
 
 const parameters = [
-  ['feed', 'Feed (f)', 0, undefined, 0.05],
-  ['kill', 'Kill (k)', 0, undefined, 0.05],
-  ['diffusionA', 'Diffusion A', 0],
-  ['diffusionB', 'Diffusion B', 0],
-  ['stepsPerSecond', 'Speed (steps/sec)', 0, undefined, 100],
+  ['feed', 'Feed (f)', 0, undefined, 0.001],
+  ['kill', 'Kill (k)', 0, undefined, 0.001],
+  ['diffusionA', 'Diffusion A', 0, undefined, 0.05],
+  ['diffusionB', 'Diffusion B', 0, undefined, 0.05],
+  ['stepsPerSecond', 'Speed (steps/sec)', 0, undefined, 50],
   ['opacity', 'Opacity', 0, 1, 0.05],
-  ['initialSourceStrength', 'Initial B strength (B\u2080)', 0, undefined],
-  ['sourceStrength', 'Input strength (s)', 0,undefined,.01],
-  ['mouseRadius', 'Mouse radius (pixels)', 0, undefined, 10],
-  ['simulationLongEdge', 'Sim size (pixels)', 2, undefined, 10],
-  ['sourceLongEdge', 'Snapshot size (pixels)', 2, undefined, 110],
-  ['sourceInterval', 'Capture interval (ms)', 0,undefined,50],
+  ['initialSourceStrength', 'Initial B strength (B\u2080)', 0, 1, 0.05],
+  ['sourceStrength', 'Input strength (s)', 0, undefined, 0.001],
+  ['mouseRadius', 'Mouse radius (pixels)', 0, undefined, 5],
+  ['simulationLongEdge', 'Sim size (pixels)', 2, undefined, 64],
+  ['sourceLongEdge', 'Snapshot size (pixels)', 2, undefined, 64],
+  ['sourceInterval', 'Capture interval (ms)', 0, 2147483647, 50],
 ];
 const parameterDescriptions = {
   feed: 'Rate of replenishing A.',
@@ -338,8 +358,9 @@ const parameterDescriptions = {
   sourceLongEdge: 'Snapshot detail along its longest side.',
   sourceInterval: 'Minimum time between captures; lower is faster.',
 };
-for (const [name, title, min, max, step = 'any'] of parameters) {
-  const label = document.createElement('label');
+for (const [name, title, min, max, step] of parameters) {
+  const label = document.createElement('div');
+  label.className = 'parameter-control';
   const titleElement = document.createElement('span');
   titleElement.id = `${name}-label`;
   titleElement.textContent = title;
@@ -350,20 +371,49 @@ for (const [name, title, min, max, step = 'any'] of parameters) {
     titleElement.append(subscript, ')');
   }
   const input = document.createElement('input');
-  Object.assign(input, { type: 'number', name, min, step, value: SETTINGS[name], required: true });
+  // Increment size is a convenience, not a restriction on typed precision.
+  Object.assign(input, { type: 'number', name, min, step: 'any', value: SETTINGS[name], required: true });
   if (max !== undefined) input.max = max;
+  const numberControl = document.createElement('div');
+  numberControl.className = 'number-control';
+  numberControl.append(input);
+  const increment = direction => {
+    const current = Number.isFinite(input.valueAsNumber) ? input.valueAsNumber : SETTINGS[name];
+    const next = Number((current + direction * step).toPrecision(12));
+    input.value = Math.min(input.max === '' ? Infinity : Number(input.max), Math.max(min, next));
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  for (const [direction, symbol, action] of [[1, '\u25b2', 'Increase'], [-1, '\u25bc', 'Decrease']]) {
+    const arrow = document.createElement('button');
+    arrow.type = 'button';
+    arrow.textContent = symbol;
+    arrow.setAttribute('aria-label', `${action} ${title} by ${step}`);
+    arrow.addEventListener('click', () => increment(direction));
+    numberControl.append(arrow);
+  }
+  input.addEventListener('keydown', event => {
+    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+    event.preventDefault();
+    increment(event.key === 'ArrowUp' ? 1 : -1);
+  });
   const description = document.createElement('small');
   description.id = `${name}-description`;
   description.textContent = parameterDescriptions[name];
   input.setAttribute('aria-labelledby', titleElement.id);
   input.setAttribute('aria-describedby', description.id);
-  label.append(titleElement, input, description);
+  label.append(titleElement, numberControl, description);
   form.append(label);
 }
 
 function validParameters() {
-  for (const input of form.elements) {
-    input.setCustomValidity(Number.isFinite(Math.fround(input.valueAsNumber)) ? '' : 'Enter a finite number supported by the simulation.');
+  for (const [name] of parameters) {
+    const input = form.elements.namedItem(name);
+    const value = input.valueAsNumber;
+    let message = Number.isFinite(Math.fround(value)) ? '' : 'Enter a finite number supported by the simulation.';
+    if (!message && name.endsWith('LongEdge') && !Number.isInteger(value)) {
+      message = 'Enter a whole number of pixels.';
+    }
+    input.setCustomValidity(message);
   }
   return form.checkValidity();
 }

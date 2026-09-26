@@ -12,7 +12,7 @@
 }
 
 html {
-  scroll-padding-top: 24px;
+  scroll-padding-top: var(--controls-scroll-offset, 24px);
 }
 
 body {
@@ -21,7 +21,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
@@ -82,7 +82,7 @@ h1, h2 {
 }
 
 h1 {
-  font-size: clamp(40px, 6vw, 54px);
+  font-size: clamp(2.5rem, 6vw, 3.375rem);
   line-height: 1.1;
   letter-spacing: -.035em;
   margin: 0 0 22px;
@@ -99,7 +99,7 @@ p {
   padding: 0;
   margin: 24px 0 0;
   list-style: none;
-  font-size: 13px;
+  font-size: 0.875rem;
   color: var(--accent);
 }
 
@@ -121,7 +121,7 @@ p {
 }
 
 h2 {
-  font-size: 29px;
+  font-size: 1.8125rem;
   line-height: 1.3;
   letter-spacing: -.025em;
   margin: 0 0 22px;
@@ -130,7 +130,7 @@ h2 {
 .content-section > p {
   color: var(--muted);
   max-width: 700px;
-  font-size: 15px;
+  font-size: 1rem;
 }
 
 .project {
@@ -230,7 +230,7 @@ h2 {
 }
 
 h3 {
-  font-size: 17px;
+  font-size: 1.0625rem;
   line-height: 1.45;
   font-weight: 600;
   margin: 0 0 8px;
@@ -255,17 +255,17 @@ h3 {
 
 .publication-year {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 0.875rem;
   padding-top: 2px;
 }
 
 .publication-list h3 {
-  font-size: 15px;
+  font-size: 1rem;
   margin-bottom: 4px;
 }
 
 .publication-list p {
-  font-size: 13px;
+  font-size: 0.875rem;
   margin: 0 0 3px;
   color: var(--muted);
 }
@@ -285,7 +285,7 @@ footer {
   display: flex;
   justify-content: space-between;
   gap: 15px;
-  font-size: 11px;
+  font-size: 0.875rem;
   color: var(--muted);
 }
 
@@ -295,7 +295,7 @@ footer a {
 
 .profile-links a {
   text-decoration: none;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .profile-links a:hover, .project-copy h3 a:hover {
@@ -308,7 +308,7 @@ footer a {
 }
 
 .project-link {
-  font-size: 13px;
+  font-size: 0.875rem;
 }
 
 .intro-copy p {
@@ -317,7 +317,7 @@ footer a {
 
 .project-copy p {
   color: var(--muted);
-  font-size: 15px;
+  font-size: 1rem;
   margin-bottom: 10px;
 }
 
@@ -359,7 +359,7 @@ footer a {
   }
 
   h1 {
-    font-size: 43px;
+    font-size: 2.6875rem;
   }
 
   .project {
@@ -372,11 +372,11 @@ footer a {
   }
 
   .project-copy h3 {
-    font-size: 17px;
+    font-size: 1.0625rem;
   }
 
   h2 {
-    font-size: 27px;
+    font-size: 1.6875rem;
   }
 
   footer {
@@ -441,16 +441,12 @@ footer a {
 #animation-toggle:hover { text-decoration: underline; }
 #animation-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 
-@media (prefers-reduced-motion: reduce), print {
-  #reaction-background, #simulation-controls { display: none; }
-}
-
 #simulation-controls {
   position: sticky;
   top: 12px;
   z-index: 2;
-  max-height: calc(100vh - 24px);
-  max-height: calc(100dvh - 24px);
+  max-height: calc(70vh - 24px);
+  max-height: calc(70dvh - 24px);
   margin-top: 12px;
   padding: 18px;
   border: 1px solid var(--line);
@@ -459,17 +455,17 @@ footer a {
 }
 
 #simulation-controls:not([hidden]) { display: flex; flex-direction: column; }
-#simulation-details { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px; }
+#simulation-details { min-height: 0; overflow-y: auto; overscroll-behavior: auto; padding: 4px; }
 #simulation-controls .simulation-actions { flex-shrink: 0; }
 
-#simulation-controls h2 { margin: 0 0 6px; font-family: inherit; font-size: 16px; font-weight: 600; line-height: 1.4; }
-#simulation-controls p { margin: 0 0 14px; font-size: 13px; color: var(--muted); }
-.model-equations { margin: 0 0 12px; font-family: Georgia, "Times New Roman", serif; font-size: 16px; line-height: 1.8; }
+#simulation-controls h2 { margin: 0 0 6px; font-family: inherit; font-size: 1rem; font-weight: 600; line-height: 1.4; }
+#simulation-controls p { margin: 0 0 14px; font-size: 0.875rem; color: var(--muted); }
+.model-equations { margin: 0 0 12px; font-family: Georgia, "Times New Roman", serif; font-size: 1rem; line-height: 1.8; }
 .model-equations > div { overflow-wrap: anywhere; }
-#simulation-parameters { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
-#simulation-parameters label { display: grid; grid-template-rows: auto auto 1fr; align-content: start; gap: 4px; font-size: 12px; }
-#simulation-parameters label > span { font-weight: 700; }
-#simulation-parameters small { font-size: 11px; line-height: 1.4; }
+#simulation-parameters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); gap: 12px; }
+#simulation-parameters .parameter-control { display: grid; grid-template-rows: subgrid; grid-row: span 3; min-width: 0; align-content: start; gap: 4px; font-size: 0.875rem; }
+#simulation-parameters .parameter-control > span { font-weight: 700; }
+#simulation-parameters small { font-size: 0.875rem; line-height: 1.4; }
 #simulation-parameters input {
   width: 100%;
   min-width: 0;
@@ -479,10 +475,10 @@ footer a {
   background: white;
   color: var(--ink);
   font: inherit;
-  font-size: 14px;
+  font-size: 1rem;
 }
 #simulation-parameters input:focus-visible, .simulation-actions button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.simulation-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 12px; }
+.simulation-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 0.875rem; }
 .simulation-actions button { border: 0; padding: 0; background: none; color: var(--accent); font: inherit; cursor: pointer; }
 .simulation-actions button:hover { text-decoration: underline; }
 #simulation-details[hidden] + .simulation-actions { margin-top: 0; }
@@ -490,3 +486,62 @@ footer a {
 #simulation-details[hidden] + .simulation-actions #simulation-defaults { display: none; }
 #simulation-collapse { margin-left: auto; }
 #simulation-collapse:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.number-control { display: grid; grid-template-columns: minmax(0, 1fr) 28px; }
+.number-control input { grid-row: span 2; appearance: textfield; -moz-appearance: textfield; }
+.number-control input::-webkit-inner-spin-button,
+.number-control input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.number-control button { padding: 0; min-height: 22px; border: 1px solid #b9c2b9; background: white; color: var(--accent); cursor: pointer; font-size: 0.625rem; }
+.number-control button:hover { background: #e8eee2; }
+.number-control button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; z-index: 1; }
+
+@media screen and (min-width: 900px) {
+  body { font-size: 1.375rem; }
+  .site-shell { max-width: 1280px; padding: 0 48px; }
+  .intro { grid-template-columns: minmax(0, 1fr) 270px; gap: 64px; }
+  h1 { font-size: 4.5rem; }
+  h2 { font-size: 2.5rem; }
+  h3 { font-size: 1.5625rem; }
+  .content-section > p { max-width: 1000px; font-size: 1.375rem; }
+  .project { grid-template-columns: 220px minmax(0, 1fr); gap: 36px; }
+  .project-art { height: 166px; }
+  .project-copy p, .publication-list h3 { font-size: 1.3125rem; }
+  .profile-links, .profile-links a, .project-link,
+  .publication-year, .publication-list p { font-size: 1.125rem; }
+  .publication-list li { grid-template-columns: 66px minmax(0, 1fr); gap: 22px; }
+  footer { font-size: 1rem; }
+  #simulation-controls h2 { font-size: 1.375rem; }
+  #simulation-controls p, .simulation-actions { font-size: 1.0625rem; }
+  .model-equations { font-size: 1.3125rem; }
+  #simulation-parameters { grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.625rem), 1fr)); }
+  #simulation-parameters .parameter-control { font-size: 1rem; }
+  #simulation-parameters small { font-size: 0.875rem; }
+  #simulation-parameters input { font-size: 1.125rem; }
+}
+
+/* Let enlarged text wrap without widening grid tracks or the page. */
+main, .parameter-control, .simulation-actions { overflow-wrap: anywhere; }
+.parameter-control > span sub { line-height: 0; }
+.simulation-actions button { min-height: 44px; max-width: 100%; }
+.number-control { grid-template-columns: minmax(0, 1fr) 36px; }
+.number-control button { min-height: 28px; }
+
+/* Expanded controls join normal page scrolling on phones and short windows. */
+@media screen and (max-width: 899px), screen and (max-height: 600px) {
+  #simulation-controls:has(#simulation-details:not([hidden])) {
+    position: relative;
+    top: auto;
+    max-height: none;
+  }
+  #simulation-details { overflow: visible; }
+  .simulation-actions { gap: 8px 16px; }
+}
+@media (pointer: coarse) {
+  .number-control { grid-template-columns: minmax(0, 1fr) 44px; }
+  .number-control button { min-height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  #reaction-background, #simulation-controls,
+  #simulation-controls:not([hidden]) { display: none; }
+}

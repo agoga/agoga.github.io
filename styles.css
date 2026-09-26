@@ -1,9 +1,9 @@
 :root {
   color-scheme: light;
-  --paper: #faf9f6;
-  --ink: #17251f;
+  --paper: #F7F9FC;
+  --ink: #182534;
   --muted: var(--ink);
-  --accent: #245442;
+  --accent: #244F78;
   --line: #dedfd7;
 }
 
@@ -455,12 +455,12 @@ footer a {
 }
 
 #simulation-controls:not([hidden]) { display: flex; flex-direction: column; }
-#simulation-details { min-height: 0; overflow-y: auto; overscroll-behavior: auto; padding: 4px; }
+#simulation-details { min-height: 0; overflow-y: auto; overscroll-behavior: auto; padding: 4px; margin-top: 12px; }
 #simulation-controls .simulation-actions { flex-shrink: 0; }
 
 #simulation-controls h2 { margin: 0 0 6px; font-family: inherit; font-size: 1rem; font-weight: 600; line-height: 1.4; }
 #simulation-controls p { margin: 0 0 14px; font-size: 0.875rem; color: var(--muted); }
-.model-equations { margin: 0 0 12px; font-family: Georgia, "Times New Roman", serif; font-size: 1rem; line-height: 1.8; }
+.model-equations { margin: 0 0 12px; font-family: Georgia, "Times New Roman", serif; font-size: 0.9375rem; line-height: 1.8; }
 .model-equations > div { overflow-wrap: anywhere; }
 #simulation-parameters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); gap: 12px; }
 #simulation-parameters .parameter-control { display: grid; grid-template-rows: subgrid; grid-row: span 3; min-width: 0; align-content: start; gap: 4px; font-size: 0.875rem; }
@@ -481,9 +481,7 @@ footer a {
 .simulation-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 0.875rem; }
 .simulation-actions button { border: 0; padding: 0; background: none; color: var(--accent); font: inherit; cursor: pointer; }
 .simulation-actions button:hover { text-decoration: underline; }
-#simulation-details[hidden] + .simulation-actions { margin-top: 0; }
-#simulation-details[hidden] + .simulation-actions #simulation-restart,
-#simulation-details[hidden] + .simulation-actions #simulation-defaults { display: none; }
+#simulation-controls > .simulation-actions { margin-top: 0; }
 #simulation-collapse { margin-left: auto; }
 #simulation-collapse:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -512,7 +510,7 @@ footer a {
   footer { font-size: 1rem; }
   #simulation-controls h2 { font-size: 1.375rem; }
   #simulation-controls p, .simulation-actions { font-size: 1.0625rem; }
-  .model-equations { font-size: 1.3125rem; }
+  .model-equations { font-size: 1.1875rem; }
   #simulation-parameters { grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.625rem), 1fr)); }
   #simulation-parameters .parameter-control { font-size: 1rem; }
   #simulation-parameters small { font-size: 0.875rem; }
@@ -544,4 +542,30 @@ main, .parameter-control, .simulation-actions { overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce), print {
   #reaction-background, #simulation-controls,
   #simulation-controls:not([hidden]) { display: none; }
+}
+
+/* Temporary palette preview: remove with js/palette-preview.js. */
+.palette-preview { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex-shrink: 0; border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; font-size: 0.875rem; }
+.palette-preview-title { flex-basis: 100%; font-weight: 600; }
+.palette-preview button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 10px; border: 1px solid var(--accent); border-radius: 4px; background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
+.palette-preview button::before { content: ''; flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--swatch); border: 1px solid currentColor; }
+.palette-preview button[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 1px; font-weight: 700; }
+.palette-preview button:hover { text-decoration: underline; }
+.palette-preview button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+/* End temporary palette preview. */
+
+/* Shared toolbar presets and nested parameter disclosure. */
+.parameter-preview button::before { display: none; }
+.pattern-select { display: none; min-width: 0; max-width: 100%; min-height: 44px; padding: 6px; font: inherit; font-size: 1rem; color: var(--ink); background: var(--paper); border: 1px solid var(--accent); border-radius: 4px; }
+#pattern-slot { flex: 1; min-width: 0; }
+#pattern-slot .parameter-preview { margin: 0; padding: 3px; border: 0; }
+#pattern-slot .palette-preview-title { flex-basis: auto; font-weight: 400; }
+#simulation-controls .parameter-actions { font-size: 0.875rem; margin-top: 12px; }
+#simulation-parameters { margin-top: 12px; }
+#simulation-parameters[hidden] { display: none; }
+.pattern-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 899px) {
+  #pattern-slot .parameter-preview button { display: none; }
+  #pattern-slot .pattern-select { display: block; flex: 1; }
+  #pattern-slot { flex-basis: 12rem; }
 }

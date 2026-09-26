@@ -6,34 +6,37 @@
     <meta content="Adam Goga - computational physicist and software engineer working on semiconductor materials, solar cells, and scientific computing." name="description"/>
     <title>Adam Goga - Computational Physics</title>
     <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
-    <link href="styles.css?v=responsive-controls-4" rel="stylesheet"/>
+    <link href="styles.css?v=stable-toolbar-11" rel="stylesheet"/>
   </head>
   <body id="top">
     <canvas id="reaction-background" aria-hidden="true" hidden></canvas>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-shell">
-      <section id="simulation-controls" aria-labelledby="simulation-title" hidden>
+      <section id="simulation-controls" aria-label="Simulation controls" hidden>
+        <div class="simulation-actions">
+          <button id="animation-toggle" type="button" hidden><span aria-hidden="true">&#9632;</span> <span class="button-label">Stop background (Esc)</span></button>
+          <div id="pattern-slot"></div>
+          <button id="simulation-collapse" type="button" aria-expanded="false" aria-controls="simulation-details"><span aria-hidden="true">+</span> <span class="button-label">Expand controls</span></button>
+        </div>
         <div id="simulation-details" hidden>
-          <h2 id="simulation-title">Simulation</h2>
-          <p>This page runs a Gray-Scott reaction-diffusion simulation in the background described by equations (1) and (2). The visible webpage continuously feeds the pattern, and moving your mouse adds local disturbances.</p>
+          <p>This page runs a Gray-Scott reaction-diffusion simulation in the background(WebGL2) described by the coupled differential equations (1) and (2). The visible webpage continuously feeds the pattern, and moving your mouse adds local disturbances. The presets are some cool behaviors I found when exploring the parameter space which you can play with yourself by adjusting the parameters below.</p>
           <div class="model-equations" aria-label="Gray-Scott equations with page input">
             <div>(1) &part;A/&part;t = D<sub>A</sub>&nabla;<sup>2</sup>A &minus; AB<sup>2</sup> + f(1 &minus; A)</div>
             <div>(2) &part;B/&part;t = D<sub>B</sub>&nabla;<sup>2</sup>B + AB<sup>2</sup> &minus; (f + k)B + s[P(x, y, t) + M(x, y, t)]</div>
           </div>
-          <form id="simulation-parameters" aria-label="Simulation parameters"></form>
-        </div>
-        <div class="simulation-actions">
-          <button id="animation-toggle" type="button" hidden><span aria-hidden="true">&#9632;</span> <span class="button-label">Stop background(Esc)</span></button>
-          <button id="simulation-restart" type="button">Restart from page</button>
-          <button id="simulation-defaults" type="button">Reset to defaults</button>
-          <button id="simulation-collapse" type="button" aria-expanded="false" aria-controls="simulation-details"><span aria-hidden="true">+</span> <span class="button-label">Expand controls</span></button>
+          <div class="simulation-actions parameter-actions">
+            <button id="parameter-toggle" type="button" aria-expanded="false" aria-controls="simulation-parameters"><span aria-hidden="true">+</span> Adjust parameters</button>
+            <button id="simulation-restart" type="button">Restart from page</button>
+            <button id="simulation-defaults" type="button">Reset to defaults</button>
+          </div>
+          <form id="simulation-parameters" aria-label="Simulation parameters" hidden></form>
         </div>
       </section>
       <main id="main">
         <section aria-labelledby="name" class="intro" id="about">
           <div class="intro-copy">
             <h1 id="name">Adam Goga</h1>
-            <p>I'm a computational physicist with a background in software engineering. I build simulations and scientific software to study semiconductor materials and solar cell degradation.</p>
+            <p>I'm a computational physicist with a background in software engineering. I recently completed my Ph.D. in Physics at UC Davis, where I modeled semiconductor materials and devices to understand degradation during solar cell fabrication.</p>
             <ul aria-label="Contact and profiles" class="profile-links">
               <li><a href="mailto:adfgoga@gmail.com">Email</a></li>
               <li><a href="https://github.com/agoga">GitHub</a></li>
@@ -47,8 +50,8 @@
         </section>
         <section aria-labelledby="background-title" class="content-section" id="background">
           <h2 id="background-title">Background</h2>
-          <p>I started in software engineering after earning a computer science degree at DigiPen in 2011, building games and educational software. I later returned to school to study applied physics and mathematics at Coastal Carolina University, graduating in 2020.</p>
-          <p>Along the way, a research internship at CU Boulder / HAO / LASP introduced me to stellar data analysis. My Ph.D. research at UC Davis has focused on semiconductor materials and solar cell degradation, bringing together physics, numerical modeling, and software development.</p>
+          <p>I started my career as a software engineer, building games and educational software after earning a computer science degree from DigiPen Institute of Technology. I later returned to school to study physics and mathematics at Coastal Carolina University, before beginning research at UC Davis in 2020.</p> 
+          <p>I enjoy building software to help investigate problems, from developing simulations and organizing the results to finding ways to explore what the data shows. I like being able to change something, see what happens, and keep digging when the result is surprising. Making video games (fun) taught me to build solutions that are intuitive enough to make this quick and reliable enough to trust. Research reminded me to question everything; sometimes we should even question the question.</p>
         </section>
         <section aria-labelledby="projects-title" class="content-section" id="projects">
           <h2 id="projects-title">Projects</h2>

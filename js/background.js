@@ -1,4 +1,6 @@
 import { PageSource } from './page-source.js';
+import { mountPalettePreview } from './palette-preview.js'; // Temporary palette UI.
+import { PRESETS, mountParameterPreview } from './parameter-preview.js';
 
 // The portfolio never depends on this optional effect.
 const SETTINGS = {
@@ -15,19 +17,12 @@ const SETTINGS = {
   mouseRadius: 30,
   initialSourceStrength: 0.5,
   opacity: 0.5,
-  color: [185 / 255, 203 / 255, 194 / 255], // #B9CBC2, including at full opacity.
+  color: [184 / 255, 204 / 255, 226 / 255], // Cool blue #B8CCE2, including at full opacity.
 };
 
 const DEFAULTS = Object.freeze({ ...SETTINGS });
 
-// Code-only experiments: set ACTIVE_PRESET to a key below and reload.
-// These are starting points; continuous page input changes the resulting patterns.
-const PRESETS = {
-  pageTrace: { feed: 0.029, kill: 0.057, sourceStrength: 0.01 },
-  fineSpots: { feed: 0.035, kill: 0.065, sourceStrength: 0.0005 },
-  windingBands: { feed: 0.025, kill: 0.055, sourceStrength: 0.001 },
-  softWaves: { feed: 0.014, kill: 0.045, sourceStrength: 0.0005, opacity: 0.35 },
-};
+// Optional startup preset; definitions are shared with the temporary buttons.
 const ACTIVE_PRESET = null;
 if (ACTIVE_PRESET !== null) Object.assign(SETTINGS, PRESETS[ACTIVE_PRESET]);
 
@@ -186,6 +181,7 @@ class Simulation {
     gl.uniform1f(gl.getUniformLocation(this.initializeProgram, 'initialSourceStrength'), SETTINGS.initialSourceStrength);
     gl.useProgram(this.displayProgram);
     gl.uniform1f(gl.getUniformLocation(this.displayProgram, 'opacity'), SETTINGS.opacity);
+    gl.uniform3fv(gl.getUniformLocation(this.displayProgram, 'ink'), SETTINGS.color);
   }
 
   target(width, height) {
@@ -418,10 +414,18 @@ function validParameters() {
   return form.checkValidity();
 }
 
+function reportParameterError() {
+  if (document.querySelector('#simulation-details').hidden) {
+    document.querySelector('#simulation-collapse').click();
+  }
+  if (form.hidden) document.querySelector('#parameter-toggle').click();
+  form.reportValidity();
+}
+
 function restart() {
   clearTimeout(restartTimer);
   if (failed || reducedMotion.matches) return;
-  if (!validParameters()) { form.reportValidity(); return; }
+  if (!validParameters()) { reportParameterError(); return; }
   for (const [name] of parameters) SETTINGS[name] = form.elements.namedItem(name).valueAsNumber;
   stop();
   pageSource?.dispose();
@@ -436,6 +440,23 @@ function restart() {
 }
 
 form.addEventListener('submit', event => { event.preventDefault(); restart(); });
+
+// Re-enable for future palette testing; no palette UI is mounted by default.
+const SHOW_PALETTE_PREVIEW = false;
+if (SHOW_PALETTE_PREVIEW) mountPalettePreview(document.querySelector('#simulation-details'), ({ paper, color, ink, accent }) => {
+  if (!validParameters()) { reportParameterError(); return false; }
+  for (const [name, value] of Object.entries({ paper, ink, accent })) {
+    document.documentElement.style.setProperty(`--${name}`, value);
+  }
+  SETTINGS.color = color;
+  restart();
+  return true;
+});
+// Temporary parameter UI: remove this mount call to hide the preset buttons.
+const refreshPresetSelection = mountParameterPreview(document.querySelector('#pattern-slot'), form, preset => {
+  for (const [name, value] of Object.entries(preset)) form.elements.namedItem(name).value = value;
+  restart();
+});
 form.addEventListener('input', () => {
   clearTimeout(restartTimer);
   if (!validParameters()) { sync(); return; }
@@ -446,19 +467,29 @@ form.addEventListener('input', () => {
 document.querySelector('#simulation-restart').addEventListener('click', restart);
 document.querySelector('#simulation-defaults').addEventListener('click', () => {
   for (const [name] of parameters) form.elements.namedItem(name).value = DEFAULTS[name];
+  refreshPresetSelection();
   restart();
 });
 document.querySelector('#simulation-collapse').addEventListener('click', event => {
+  const previousTop = controls.getBoundingClientRect().top;
   const details = document.querySelector('#simulation-details');
   details.hidden = !details.hidden;
   const toggle = event.currentTarget;
-  const label = details.hidden ? 'Expand controls' : 'Minimize simulation controls';
+  const label = details.hidden ? 'Expand controls' : 'Collapse controls';
   toggle.setAttribute('aria-expanded', String(!details.hidden));
   toggle.setAttribute('aria-label', label);
   toggle.title = label;
   toggle.querySelector('[aria-hidden]').textContent = details.hidden ? '+' : '\u2212';
   toggle.querySelector('.button-label').textContent = label;
+  // Preserve the toolbar position when small screens switch out of sticky mode.
+  window.scrollBy(0, controls.getBoundingClientRect().top - previousTop);
   // Collapsing moves the content even though its own dimensions stay the same.
+  pageSource?.invalidate();
+});
+document.querySelector('#parameter-toggle').addEventListener('click', event => {
+  form.hidden = !form.hidden;
+  event.currentTarget.setAttribute('aria-expanded', String(!form.hidden));
+  event.currentTarget.querySelector('span').textContent = form.hidden ? '+' : '\u2212';
   pageSource?.invalidate();
 });
 
@@ -507,7 +538,7 @@ function sync() {
   stop();
   pageSource?.setActive(false);
   canvas.hidden = failed || reducedMotion.matches || !simulation?.initialized;
-  button.hidden = failed || reducedMotion.matches || !simulation?.initialized;
+  button.hidden = failed || reducedMotion.matches;
   controls.hidden = failed || reducedMotion.matches;
   if (failed || reducedMotion.matches || document.hidden) return;
   try {

@@ -1,17 +1,16 @@
-// Literature-derived starting points; page-shaped seeds affect the outcome.
-// Sources and numerical differences are documented in README.md.
+// User-tuned presets, initially informed by Gray-Scott examples.
+// These values are the source of truth; page-shaped seeds affect the outcome.
 const classic = { diffusionA: 1, diffusionB: 0.5, initialSourceStrength: 0.5, sourceStrength: 0.01 };
 export const PRESETS = {
   pageTrace: { ...classic, feed: 0.029, kill: 0.057, sourceStrength: 0.01 },
-  mitosis: { ...classic, feed: 0.035, kill: 0.0625, initialSourceStrength: 0.9, sourceStrength: 0.005, stepsPerSecond: 4000  },
+  mitosis: { ...classic, feed: 0.035, kill: 0.0625, initialSourceStrength: 0.9, sourceStrength: 0.005, stepsPerSecond: 4000 },
   foamFill: { ...classic, feed: 0.026, kill: 0.051 },
   softWaves: { ...classic, feed: 0.014, kill: 0.051 },
-  //  mitosis: { ...classic, feed: 0.0367, kill: 0.0649 }, //kill
   wanderingLine: { ...classic, feed: 0.0545, kill: 0.062, stepsPerSecond: 5000 },
 };
 const LABELS = {
   pageTrace: 'Page trace', mitosis: 'Mitosis', foamFill: 'Foam Fill',
-  softWaves: 'Wavelets',  wanderingLine: 'Wandering Lines',
+  softWaves: 'Wavelets', wanderingLine: 'Wandering Lines',
 };
 
 // Temporary UI: remove the mount call to retain only the code presets.

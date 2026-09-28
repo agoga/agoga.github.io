@@ -128,8 +128,6 @@ class Simulation {
       this.mouseUniforms = Object.fromEntries(['mousePosition', 'viewportSize', 'mouseRadius', 'mouseStrength']
         .map(name => [name, gl.getUniformLocation(this.updateProgram, name)]));
       this.sourceReady = false;
-      gl.useProgram(this.displayProgram);
-      gl.uniform3fv(gl.getUniformLocation(this.displayProgram, 'ink'), SETTINGS.color);
       this.applySettings();
       this.resize();
     } catch (error) {

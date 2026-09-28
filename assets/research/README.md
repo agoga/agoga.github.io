@@ -1,0 +1,13 @@
+# Research images
+
+Put original research images here. In `content/portfolio.json`, set the matching
+entry's `image` to `assets/research/your-file.png` and provide `imageAlt`.
+Run `python scripts/build_portfolio.py` to update the page.
+
+The same 4:3 frame and contain scaling are used for projects and research.
+Keep `image: null` until the image is ready. Original files are not resized or cropped.
+
+Projects and research can share an image from either assets folder. Frames with
+images have transparent backgrounds; only empty placeholders have a background.
+PDF figures need a PNG preview for display in an image tag. `TOPCon_pinhole.png`
+is the preview of the original `TOPCon_pinhole.pdf`, which is retained here.

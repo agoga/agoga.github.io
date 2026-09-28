@@ -1,0 +1,334 @@
+[
+  {
+    "id": "research-hydrogen-transport-and-degradation-in-silicon-solar-cells",
+    "kind": "research",
+    "title": "Hydrogen transport and degradation in silicon solar cells",
+    "description": "We investigated how hydrogen diffusion causes TOPCon solar cells to lose and recover surface passivation during firing and subsequent annealing. We combined experimental measurements with a trap-limited diffusion model to explain the non-monotonic behavior of the recombination current density, J₀, throughout this cycle. We found that hydrogen accumulates in the thin silicon oxide layer before redistributing, linking the rise and fall of J₀ to the local hydrogen concentration.",
+    "links": [],
+    "related": [
+      "project-hydrogen-transport-model"
+    ],
+    "publications": [
+      {
+        "type": "paper",
+        "title": "Understanding Hydrogen Induced J₀ Dynamics in n-TOPCon Contacts: Moving Beyond Kinetic Models",
+        "url": null,
+        "year": "2026",
+        "authors": "A. Ratnapagol*, A. Goga*, Z. Zhao, D. Young, G. Zimanyi, and S. Agarwal, *Co-first authors",
+        "venue": "Manuscript in submission",
+        "note": ""
+      }
+    ],
+    "image": "assets/research/HydrogenPassivationDegredation.jpg",
+    "imageAlt": "SIMs profile of hydrogen in TOPCCon cells"
+  },
+  {
+    "id": "research-fermi-level-and-light-driven-defects-in-silicon-solar-cells",
+    "kind": "research",
+    "title": "Fermi level and light driven defects in silicon solar cells",
+    "description": "Hydrogen passivates dangling bonds at silicon interfaces, but a broken Si–H bond can leave a recombination-active defect. First-principles calculations follow that bond-breaking path under different doping and illumination conditions. The predicted barriers fall asymmetrically for p-type and n-type silicon and fall further under illumination, consistent with measured hydrogen mobility and light-induced degradation. In additional work presented in Chapter 2 of my thesis, I connected DFT calculations of silicon–hydrogen bond-breaking barriers with TCAD simulations of how the resulting defects affect silicon heterojunction solar cells. Together, these results showed that p-type contacts both generate defects more readily and suffer greater voltage losses from those defects, helping explain their stronger degradation compared with n-type contacts in experiments.",
+    "links": [],
+    "related": [
+      "project-solar-cell-device-modeling"
+    ],
+    "publications": [
+      {
+        "type": "paper",
+        "title": "Fermi Level and Light Driven Defect Generation in Silicon Solar Cells",
+        "url": "https://arxiv.org/abs/2501.06667",
+        "year": "2025",
+        "authors": "A. Diggs, Z. Zhao, A. Goga, Z. Crawford, and G. T. Zimanyi",
+        "venue": "arXiv:2501.06667",
+        "note": ""
+      },
+      {
+        "type": "presentation",
+        "title": "The Fermi-Level Dependence of Hydrogen Dynamics and Its Effects on Degradation of Silicon Heterojunction Solar Cells",
+        "url": "https://doi.org/10.1109/PVSC59419.2025.11132609",
+        "year": "2025",
+        "authors": "",
+        "venue": "IEEE Photovoltaic Specialists Conference (PVSC)",
+        "note": ""
+      },
+      {
+        "type": "presentation",
+        "title": "Light Induced Degradation in Silicon Heterojunction Solar Cells",
+        "url": "https://doi.org/10.1109/PVSC57443.2024.10749578",
+        "year": "2024",
+        "authors": "",
+        "venue": "IEEE Photovoltaic Specialists Conference (PVSC)",
+        "note": ""
+      }
+    ],
+    "image": "assets/research/HBarrier_FermiDep.png",
+    "imageAlt": "Fermi level dependence of the hydrogen diffusion barrier in silicon."
+  },
+  {
+    "id": "research-pinhole-formation-in-topcon-solar-cells",
+    "kind": "research",
+    "title": "Pinhole formation in TOPCon solar cells",
+    "description": "We used molecular dynamics simulations to investigate how silicon-rich pinholes form in the thin oxide layers of TOPCon and POLO solar cells during thermal processing. The simulations showed that excess hydrogen lowers the barrier for nucleation-driven phase separation, allowing pinholes to form at lower temperatures. This helps explain why hydrogen initially improves passivation but causes degradation at higher concentrations, where emerging pinholes create additional dangling-bond defects. Removing hydrogen dissolved small pinhole nuclei in the simulations, suggesting a structural mechanism for recovery.",
+    "links": [],
+    "related": [
+      "project-atomistic-oxygen-transport-pipeline"
+    ],
+    "publications": [
+      {
+        "type": "paper",
+        "title": "Pinhole Formation by Nucleation-Driven Phase Separation in TOPCon and POLO Solar Cells: Structural Dynamics and Optimization",
+        "url": "https://doi.org/10.1021/acsaem.4c00171",
+        "year": "2024",
+        "authors": "A. Diggs, Z. Crawford, A. Goga, Z. Zhao, J. Stuckelberger, and G. T. Zimányi",
+        "venue": "ACS Appl. Energy Mater.",
+        "note": "",
+        "volume": "7",
+        "pages": "3414–3423"
+      },
+      {
+        "type": "presentation",
+        "title": "Pinhole Dynamics in Textured Passivated-Contact Si Solar Cells",
+        "url": "https://doi.org/10.1109/PVSC59419.2025.11132571",
+        "year": "2025",
+        "authors": "",
+        "venue": "IEEE Photovoltaic Specialists Conference (PVSC)",
+        "note": ""
+      },
+      {
+        "type": "presentation",
+        "title": "Pinhole Formation by Nucleated Phase Separation in TOPCon and POLO Solar Cells: Structural Dynamics and Optimization",
+        "url": "https://doi.org/10.1109/PVSC57443.2024.10749186",
+        "year": "2024",
+        "authors": "",
+        "venue": "IEEE Photovoltaic Specialists Conference (PVSC)",
+        "note": ""
+      },
+      {
+        "type": "presentation",
+        "title": "TOPCon Solar Cell Degradation via Pinhole Nucleation",
+        "url": "https://doi.org/10.1109/PVSC48320.2023.10359586",
+        "year": "2023",
+        "authors": "",
+        "venue": "IEEE Photovoltaic Specialists Conference (PVSC)",
+        "note": ""
+      }
+    ],
+    "image": "assets/research/TOPCon_pinhole.png",
+    "imageAlt": "TOPCon pinhole formed in MD simulations."
+  },
+  {
+    "id": "research-critical-transport-in-quantum-dot-solids",
+    "kind": "research",
+    "title": "Critical transport in quantum-dot solids",
+    "description": "Electron transport through a connected quantum-dot solid depends on disorder both within the dots and in the connections between them. An Anderson Hamiltonian informed by electron tomography, analyzed with the transfer-matrix method and finite-size scaling, maps the transition between insulating and conducting behavior. Weak disorder in the connections produces a crossover between distinct critical regimes over a broad part of the phase diagram.",
+    "links": [],
+    "related": [
+      "project-quantum-transport-simulations"
+    ],
+    "publications": [
+      {
+        "type": "paper",
+        "title": "Critical Transport Behavior in Quantum Dot Solids",
+        "url": "https://arxiv.org/abs/2506.03676",
+        "year": "2025",
+        "authors": "Z. Crawford*, A. Goga*, M. Kovtun, and G. Zimanyi, *Co-First Authors",
+        "venue": "arXiv:2506.03676",
+        "note": ""
+      },
+      {
+        "type": "presentation",
+        "title": "Critical Transport Behavior in Quantum Dot Solids",
+        "url": "https://doi.org/10.1109/PVSC48317.2022.9938887",
+        "year": "2022",
+        "authors": "",
+        "venue": "IEEE Photovoltaic Specialists Conference (PVSC)",
+        "note": ""
+      }
+    ],
+    "image": "assets/research/ScalingCurve.png",
+    "imageAlt": "Finite size scaling curve showing the transition between insulating and conducting behavior."
+  },
+  {
+    "id": "research-magnetic-activity-cycles-in-sun-like-stars",
+    "kind": "research",
+    "title": "Magnetic activity cycles in Sun-like stars",
+    "description": "Magnetic activity in Sun-like stars varies over years to decades and may change as stars age and spin down. This survey measures emission from calcium H and K lines in spectra taken by a network of telescopes. Combining observations across sites and years provides the time series needed to examine long activity cycles and possible changes around stellar mid-life.",
+    "links": [],
+    "related": [
+      "project-stellar-spectral-analysis-pipeline"
+    ],
+    "publications": [
+      {
+        "type": "presentation",
+        "title": "Do Sun-like Stars Experience a Magnetic Mid-life Crisis? Investigation from a New Ca HK Activity Survey Using LCO NRES",
+        "url": "https://ui.adsabs.harvard.edu/abs/2019shin.confE.111G/abstract",
+        "year": "2019",
+        "authors": "",
+        "venue": "SHINE Conference",
+        "note": ""
+      }
+    ],
+    "image": null,
+    "imageAlt": ""
+  },
+  {
+    "id": "project-hydrogen-transport-model",
+    "kind": "project",
+    "title": "Hydrogen transport model",
+    "description": "A Python model represents the Al₂O₃, poly-Si, SiOₓ, and crystalline-Si layers as connected volumes with mobile and trapped hydrogen populations. Temperature-dependent diffusion, trapping, and detrapping evolve through firing and annealing schedules using PETSc time integration. The code also runs parameter sweeps, caches results, and compares predicted oxide hydrogen trends against several experimental conditions. A reduced finite-volume formulation made these sweeps tractable, cutting runtime by over 40,000×.",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/agoga/H-trap-diff"
+      }
+    ],
+    "related": [
+      "research-hydrogen-transport-and-degradation-in-silicon-solar-cells"
+    ],
+    "publications": [],
+    "image": "assets/projects/HTransportModel.jpg",
+    "imageAlt": "Schematic of the hydrogen transport in TOPCon cell during firing and annealing."
+  },
+  {
+    "id": "project-solar-cell-device-modeling",
+    "kind": "project",
+    "title": "Solar-cell device modeling",
+    "description": "This work connects atomic defect mechanisms to electrical behavior at the solar-cell scale. Quantum ESPRESSO DFT and NEB calculations examine Si–H bond breaking and hydrogen configurations; SCAPS-1D and ASA device models then vary dangling-bond populations and charge states to track band bending, interface recombination, and open-circuit voltage. Python scripts automate device sweeps and analyze their outputs against experimental degradation trends.",
+    "links": [],
+    "related": [
+      "research-fermi-level-and-light-driven-defects-in-silicon-solar-cells"
+    ],
+    "publications": [],
+    "image": "assets/research/HBarrier_FermiDep.png",
+    "imageAlt": "Fermi level dependence of the hydrogen diffusion barrier in silicon."
+  },
+  {
+    "id": "project-atomistic-oxygen-transport-pipeline",
+    "kind": "project",
+    "title": "Atomistic oxygen-transport pipeline",
+    "description": "A Python, LAMMPS, and Slurm workflow creates amorphous SiOₓ samples and generates candidate oxygen-migration paths for nudged-elastic-band calculations. It prepares the endpoint structures, runs jobs, captures failed calculations, and collects energy barriers with local structural information and visualizations. The pipeline probes whether changes in oxygen transport could explain hydrogen-assisted pinhole formation; the published pinhole study encompasses related structural physics beyond this pipeline.",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/agoga/TOPCON-MD"
+      }
+    ],
+    "related": [
+      "research-pinhole-formation-in-topcon-solar-cells"
+    ],
+    "publications": [],
+    "image": "assets/projects/TOPCon-NEB.gif",
+    "imageAlt": "Animated nudged-elastic-band simulation of atomic transport in TOPCon material."
+  },
+  {
+    "id": "project-quantum-transport-simulations",
+    "kind": "project",
+    "title": "Quantum transport simulations",
+    "description": "The computational model propagates electron wavefunctions through disordered quantum-dot lattices with a transfer-matrix method, then uses finite-size scaling to study localization and the metal–insulator transition. I extended the simulation and analysis code for disorder sweeps, larger systems, and scaling fits. Restructuring its linear-algebra work enabled roughly 30% larger systems in comparable runtime.",
+    "links": [],
+    "related": [
+      "research-critical-transport-in-quantum-dot-solids"
+    ],
+    "publications": [],
+    "image": null,
+    "imageAlt": ""
+  },
+  {
+    "id": "project-stellar-spectral-analysis-pipeline",
+    "kind": "project",
+    "title": "Stellar spectral analysis pipeline",
+    "description": "The nreshk Python pipeline converts raw NRES telescope spectra into nightly calcium H and K activity measurements. It matches observations to calibration files, corrects and combines spectral orders, aligns spectra by cross-correlation, rejects noisy observations using autocorrelation, and extracts the activity index from wavelength windows. Diagnostic plots and consistent output let the survey combine data across stars, sites, and years.",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/agoga/nreshk"
+      }
+    ],
+    "related": [
+      "research-magnetic-activity-cycles-in-sun-like-stars"
+    ],
+    "publications": [],
+    "image": null,
+    "imageAlt": ""
+  },
+  {
+    "id": "project-exploratory-development-of-a-si-o-h-interatomic-potential",
+    "kind": "project",
+    "title": "Exploratory development of a Si–O–H interatomic potential",
+    "description": "This repository explores training a MACE interatomic potential for silicon, oxygen, and hydrogen from Quantum ESPRESSO calculations. Python scripts collect DFT inputs and outputs, extract structures, energies, and forces into MACE-compatible extended XYZ data, and provide an initial training setup. The model remains exploratory.",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/agoga/mace-training-SiOH"
+      }
+    ],
+    "related": [],
+    "publications": [],
+    "image": null,
+    "imageAlt": ""
+  },
+  {
+    "id": "project-gray-scott-reaction-diffusion-simulator",
+    "kind": "project",
+    "title": "Gray–Scott reaction–diffusion simulator",
+    "description": "A C++ and CUDA implementation of the Gray–Scott model evolves two reacting and diffusing chemicals on a two-dimensional grid. The CPU and GPU backends make it possible to compare execution, while Python controls parameters and initial conditions and C++ can generate an animated GIF of the resulting spots, rings, and waves.",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/agoga/gray-scott-cuda"
+      }
+    ],
+    "related": [],
+    "publications": [],
+    "image": null,
+    "imageAlt": ""
+  },
+  {
+    "id": "project-microwave-scattering-from-a-lattice-of-metal-spheres",
+    "kind": "project",
+    "title": "Microwave scattering from a lattice of metal spheres",
+    "description": "MieCCU extends a single-sphere scattering calculation to a lattice of metal spheres by adding the geometry and interference between scattered microwaves. The resulting simulation illustrates Bragg scattering from an ordered array.",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/agoga/MieCCU"
+      }
+    ],
+    "related": [],
+    "publications": [],
+    "image": null,
+    "imageAlt": ""
+  },
+  {
+    "id": "project-dawn-of-empires",
+    "kind": "project",
+    "title": "Dawn of Empires",
+    "description": "A four-player 3D space shooter with ship combat, warping, upgrades, and sector control. I worked on its design and client–server networking.",
+    "links": [
+      {
+        "label": "Student game demos channel",
+        "url": "https://www.youtube.com/channel/UCOQdSPZFSz2dCGZIHv_ul3w"
+      }
+    ],
+    "related": [],
+    "publications": [],
+    "image": "assets/projects/DawnOfEmpires.png",
+    "imageAlt": "Dawn of Empires gameplay screenshot"
+  },
+  {
+    "id": "project-turn-style",
+    "kind": "project",
+    "title": "Turn Style",
+    "description": "A 2D side-scrolling platform game with a custom level editor and in-game level loader. I led the design work and developed those tools.",
+    "links": [
+      {
+        "label": "Student game demos channel",
+        "url": "https://www.youtube.com/channel/UCOQdSPZFSz2dCGZIHv_ul3w"
+      }
+    ],
+    "related": [],
+    "publications": [],
+    "image": "assets/projects/TurnStyle.gif",
+    "imageAlt": "Animated Turn Style gameplay",
+    "imageCropBottomLeftPercent": 7.5
+  }
+]

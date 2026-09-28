@@ -342,9 +342,11 @@ main, .parameter-control, .simulation-actions { overflow-wrap: anywhere; }
 #simulation-parameters[hidden] { display: none; }
 .pattern-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 @media (max-width: 899px) {
-  #simulation-controls > .simulation-actions { display: grid; grid-template-columns: minmax(0, auto) minmax(0, auto); justify-content: start; }
+  #simulation-controls > .simulation-actions { display: grid; grid-template-columns: minmax(0, auto) minmax(0, auto); justify-content: start; column-gap: 8px; }
   #animation-toggle { grid-column: 1; grid-row: 1; }
-  #simulation-collapse { grid-column: 2; grid-row: 1; margin-left: 0; }
+  #simulation-collapse { grid-column: 2; grid-row: 1; margin-left: 0; display: flex; align-items: center; gap: 0.25em; }
+  #simulation-collapse .button-label { display: inline-block; }
+  #simulation-collapse .button-label::after { content: 'Collapse controls'; display: block; height: 0; visibility: hidden; }
   #pattern-slot .parameter-preview button { display: none; }
   #pattern-slot .pattern-select { display: block; flex: 1; }
   #pattern-slot { grid-column: 1 / -1; grid-row: 2; width: 100%; }

@@ -1,5 +1,11 @@
 # Project images
 
+The site uses optimized WebP copies in `display/`; originals stay in this folder.
+After adding an original and setting its catalog image path, run
+`python scripts/optimize_images.py` (requires Pillow), then
+`python scripts/build_portfolio.py`. Re-running regenerates existing display copies.
+Animated copies retain their timing and loop count; identical frames may be merged.
+
 Put original project images here. In `content/portfolio.json`, set the matching
 entry's `image` to `assets/projects/your-file.jpg` and provide `imageAlt`.
 Run `python scripts/build_portfolio.py` to update the page.

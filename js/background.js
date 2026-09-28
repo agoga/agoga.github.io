@@ -1,4 +1,4 @@
-import { PageSource } from './page-source.js?v=recovery-29';
+import { PageSource } from './page-source.js?v=lazy-images-30';
 import { mountPalettePreview } from './palette-preview.js'; // Temporary palette UI.
 import { PRESETS, mountParameterPreview } from './parameter-preview.js';
 

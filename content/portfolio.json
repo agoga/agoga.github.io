@@ -19,7 +19,7 @@
         "note": ""
       }
     ],
-    "image": "assets/research/HydrogenPassivationDegredation.jpg",
+    "image": "assets/research/display/HydrogenPassivationDegredation.webp",
     "imageAlt": "SIMs profile of hydrogen in TOPCCon cells"
   },
   {
@@ -60,7 +60,7 @@
         "note": ""
       }
     ],
-    "image": "assets/research/HBarrier_FermiDep.png",
+    "image": "assets/research/display/HBarrier_FermiDep.webp",
     "imageAlt": "Fermi level dependence of the hydrogen diffusion barrier in silicon."
   },
   {
@@ -112,7 +112,7 @@
         "note": ""
       }
     ],
-    "image": "assets/research/TOPCon_pinhole.png",
+    "image": "assets/research/display/TOPCon_pinhole.webp",
     "imageAlt": "TOPCon pinhole formed in MD simulations."
   },
   {
@@ -144,7 +144,7 @@
         "note": ""
       }
     ],
-    "image": "assets/research/ScalingCurve.png",
+    "image": "assets/research/display/ScalingCurve.webp",
     "imageAlt": "Finite size scaling curve showing the transition between insulating and conducting behavior."
   },
   {
@@ -185,7 +185,7 @@
       "research-hydrogen-transport-and-degradation-in-silicon-solar-cells"
     ],
     "publications": [],
-    "image": "assets/projects/HTransportModel.jpg",
+    "image": "assets/projects/display/HTransportModel.webp",
     "imageAlt": "Schematic of the hydrogen transport in TOPCon cell during firing and annealing."
   },
   {
@@ -198,7 +198,7 @@
       "research-fermi-level-and-light-driven-defects-in-silicon-solar-cells"
     ],
     "publications": [],
-    "image": "assets/research/HBarrier_FermiDep.png",
+    "image": "assets/research/display/HBarrier_FermiDep.webp",
     "imageAlt": "Fermi level dependence of the hydrogen diffusion barrier in silicon."
   },
   {
@@ -216,7 +216,7 @@
       "research-pinhole-formation-in-topcon-solar-cells"
     ],
     "publications": [],
-    "image": "assets/projects/TOPCon-NEB.gif",
+    "image": "assets/projects/display/TOPCon-NEB.webp",
     "imageAlt": "Animated nudged-elastic-band simulation of atomic transport in TOPCon material."
   },
   {
@@ -311,7 +311,7 @@
     ],
     "related": [],
     "publications": [],
-    "image": "assets/projects/DawnOfEmpires.png",
+    "image": "assets/projects/display/DawnOfEmpires.webp",
     "imageAlt": "Dawn of Empires gameplay screenshot"
   },
   {
@@ -327,7 +327,7 @@
     ],
     "related": [],
     "publications": [],
-    "image": "assets/projects/TurnStyle.gif",
+    "image": "assets/projects/display/TurnStyle.webp",
     "imageAlt": "Animated Turn Style gameplay",
     "imageCropBottomLeftPercent": 7.5
   }

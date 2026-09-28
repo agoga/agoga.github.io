@@ -1,5 +1,9 @@
 # Research images
 
+The site uses optimized WebP copies in `display/`, keeping originals here.
+Run `python scripts/optimize_images.py` (requires Pillow) before rebuilding the
+portfolio to generate or refresh these display copies.
+
 Put original research images here. In `content/portfolio.json`, set the matching
 entry's `image` to `assets/research/your-file.png` and provide `imageAlt`.
 Run `python scripts/build_portfolio.py` to update the page.

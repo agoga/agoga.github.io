@@ -90,7 +90,14 @@ export class PageSource {
         logging: false,
         imageTimeout: 3000,
         ignoreElements: element => element.tagName === 'CANVAS'
-          || element.id === 'animation-toggle' || element.classList.contains('skip-link'),
+          || element.id === 'animation-toggle' || element.classList.contains('skip-link')
+          // Never make a snapshot fetch/decode lazy images outside the viewport
+          // or wait for an image still loading. Its load event refreshes the source.
+          || (element.tagName === 'IMG' && (!element.complete || (() => {
+            const bounds = element.getBoundingClientRect();
+            return !bounds.width || !bounds.height || bounds.bottom <= 0
+              || bounds.top >= viewport.height || bounds.right <= 0 || bounds.left >= viewport.width;
+          })())),
         onclone: doc => {
           // White space contributes zero source. Never capture the WebGL canvas.
           doc.documentElement.style.background = '#ffffff';

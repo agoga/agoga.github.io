@@ -342,9 +342,12 @@ main, .parameter-control, .simulation-actions { overflow-wrap: anywhere; }
 #simulation-parameters[hidden] { display: none; }
 .pattern-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 @media (max-width: 899px) {
+  #simulation-controls > .simulation-actions { display: grid; grid-template-columns: minmax(0, auto) minmax(0, auto); justify-content: start; }
+  #animation-toggle { grid-column: 1; grid-row: 1; }
+  #simulation-collapse { grid-column: 2; grid-row: 1; margin-left: 0; }
   #pattern-slot .parameter-preview button { display: none; }
   #pattern-slot .pattern-select { display: block; flex: 1; }
-  #pattern-slot { flex-basis: 12rem; }
+  #pattern-slot { grid-column: 1 / -1; grid-row: 2; width: 100%; }
 }
 
 /* Portfolio tabs and shared project/research cards. */

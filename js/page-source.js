@@ -9,7 +9,7 @@ function loadRasterizer() {
         ? resolve(window.html2canvas) : reject(new Error('Rasterizer unavailable'));
       script.onerror = () => reject(new Error('Rasterizer failed to load'));
       document.head.append(script);
-    });
+    }).catch(error => { rasterizer = null; throw error; });
   }
   return rasterizer;
 }
@@ -24,6 +24,8 @@ export class PageSource {
     this.dirty = true;
     this.generation = 0;
     this.lastStart = -Infinity;
+    this.retryAfter = 0;
+    this.failures = 0;
     this.timer = 0;
     this.events = new AbortController();
     const options = { passive: true, signal: this.events.signal };
@@ -61,7 +63,7 @@ export class PageSource {
 
   schedule() {
     if (!this.active || this.disposed || this.pending || this.timer || !this.dirty) return;
-    const delay = Math.max(0, this.interval - (performance.now() - this.lastStart));
+    const delay = Math.max(0, this.interval - (performance.now() - this.lastStart), this.retryAfter - performance.now());
     this.timer = setTimeout(() => { this.timer = 0; this.capture(); }, delay);
   }
 
@@ -102,12 +104,15 @@ export class PageSource {
         && viewport.width === window.innerWidth && viewport.height === window.innerHeight;
       if (this.active && !this.disposed && generation === this.generation && current) {
         this.onImage(image);
+        this.failures = 0;
+        this.retryAfter = 0;
       } else if (this.active && !this.disposed) {
         this.dirty = true;
       }
     } catch (error) {
       if (!this.disposed) {
-        this.dispose();
+        this.dirty = true;
+        this.retryAfter = performance.now() + Math.min(10000, 1000 * 2 ** Math.min(this.failures++, 4));
         this.onError(error);
       }
     } finally {

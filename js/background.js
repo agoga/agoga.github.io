@@ -1,8 +1,10 @@
-import { PageSource } from './page-source.js';
+import { PageSource } from './page-source.js?v=recovery-29';
 import { mountPalettePreview } from './palette-preview.js'; // Temporary palette UI.
 import { PRESETS, mountParameterPreview } from './parameter-preview.js';
 
 // The portfolio never depends on this optional effect.
+// Choose once at startup so resizing does not overwrite parameter edits.
+const initialLongEdge = window.matchMedia('(max-width: 899px)').matches ? 384 : 768;
 const SETTINGS = {
   feed: 0.029,
   kill: 0.057,
@@ -10,8 +12,8 @@ const SETTINGS = {
   diffusionB: 0.5,
   timestep: 1,
   stepsPerSecond: 500,
-  simulationLongEdge: 768,
-  sourceLongEdge: 768,
+  simulationLongEdge: initialLongEdge,
+  sourceLongEdge: initialLongEdge,
   sourceInterval: 250,
   sourceStrength: 0.01,
   mouseRadius: 30,
@@ -320,6 +322,7 @@ let previousTime = null;
 let accumulator = 0;
 let paused = false;
 let failed = false;
+let contextLost = false;
 let needsResize = true;
 let restartTimer = 0;
 const pointer = { x: 0, y: 0, expires: 0 };
@@ -422,7 +425,7 @@ function reportParameterError() {
 
 function restart() {
   clearTimeout(restartTimer);
-  if (failed || reducedMotion.matches) return;
+  if (failed || contextLost || reducedMotion.matches) return;
   if (!validParameters()) { reportParameterError(); return; }
   for (const [name] of parameters) SETTINGS[name] = form.elements.namedItem(name).valueAsNumber;
   stop();
@@ -500,6 +503,7 @@ function stop() {
 }
 
 function fail(error) {
+  if (contextLost || simulation?.gl.isContextLost()) return;
   failed = true;
   stop();
   pageSource?.dispose();
@@ -535,6 +539,7 @@ function tick(now) {
 function sync() {
   stop();
   pageSource?.setActive(false);
+  if (contextLost) return;
   canvas.hidden = failed || reducedMotion.matches || !simulation?.initialized;
   button.hidden = failed || reducedMotion.matches;
   controls.hidden = failed || reducedMotion.matches;
@@ -560,9 +565,8 @@ function sync() {
         },
         onInvalidate: () => { if (simulation) simulation.sourceReady = false; },
         onError: error => {
-          if (!simulation?.initialized) { fail(error); return; }
           if (simulation) simulation.sourceReady = false;
-          console.warn('Page influence disabled; background continues:', error);
+          console.warn('Page snapshot failed; retrying:', error);
         },
       });
     }
@@ -605,5 +609,19 @@ reducedMotion.addEventListener('change', sync);
 window.addEventListener('resize', () => { needsResize = true; if (paused) sync(); }, { passive: true });
 window.addEventListener('pagehide', () => { stop(); pageSource?.setActive(false); });
 window.addEventListener('pageshow', sync);
-canvas.addEventListener('webglcontextlost', () => fail('WebGL context lost'));
+canvas.addEventListener('webglcontextlost', event => {
+  // Allow the browser to restore a context suspended under memory pressure.
+  event.preventDefault();
+  contextLost = true;
+  stop();
+  pageSource?.dispose();
+  pageSource = null;
+  simulation = null;
+  canvas.hidden = true;
+});
+canvas.addEventListener('webglcontextrestored', () => {
+  contextLost = false;
+  needsResize = true;
+  sync();
+});
 sync();

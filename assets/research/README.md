@@ -8,7 +8,7 @@ Put original research images here. In `content/portfolio.json`, set the matching
 entry's `image` to `assets/research/your-file.png` and provide `imageAlt`.
 Run `python scripts/build_portfolio.py` to update the page.
 
-The same 4:3 frame and contain scaling are used for projects and research.
+Projects and research share a 220 CSS-pixel image width, with natural heights.
 Keep `image: null` until the image is ready. Original files are not resized or cropped.
 
 Projects and research can share an image from either assets folder. Frames with

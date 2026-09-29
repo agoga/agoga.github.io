@@ -113,7 +113,10 @@ def render(check=False):
                 if not isinstance(crop, (int, float)) or not 0 <= crop <= 25:
                     raise ValueError(f'{item["id"]}: imageCropBottomLeftPercent must be between 0 and 25')
                 crop_style = f' style="transform: scale({1 / (1 - crop / 100):.8f}); transform-origin: top right;"' if crop else ''
-                out.append(f'<div class="work-image"><img src="{esc(path)}" alt="{esc(item["imageAlt"])}" width="640" height="480" loading="lazy"{crop_style}/></div>')
+                width, height = item.get('imageWidth', 640), item.get('imageHeight', 480)
+                if any(type(size) is not int or size <= 0 for size in (width, height)):
+                    raise ValueError('Image dimensions must be positive integers')
+                out.append(f'<div class="work-image"><img src="{esc(path)}" alt="{esc(item["imageAlt"])}" width="{width}" height="{height}" loading="lazy"{crop_style}/></div>')
             else:
                 out.append('<div class="work-image work-placeholder" aria-hidden="true"><span>Image coming soon</span></div>')
             if item['related']:

@@ -6,7 +6,7 @@
     <meta content="Adam Goga - computational physicist and software engineer working on semiconductor materials, solar cells, and scientific computing." name="description"/>
     <title>Adam Goga - Computational Physics</title>
     <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
-    <link href="styles.css?v=stable-mobile-toolbar-31" rel="stylesheet"/>
+    <link href="styles.css?v=natural-image-sizes-33" rel="stylesheet"/>
   </head>
   <body id="top">
     <canvas id="reaction-background" aria-hidden="true" hidden></canvas>
@@ -60,7 +60,7 @@
 <section id="projects" class="work-panel" aria-label="Projects">
 <article class="work-entry" id="project-hydrogen-transport-model" aria-labelledby="project-hydrogen-transport-model-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/projects/display/HTransportModel.webp" alt="Schematic of the hydrogen transport in TOPCon cell during firing and annealing." width="640" height="480" loading="lazy"/></div>
+<div class="work-image"><img src="assets/projects/display/HTransportModel.webp" alt="Schematic of the hydrogen transport in TOPCon cell during firing and annealing." width="660" height="285" loading="lazy"/></div>
 <div class="work-related"><span>Related research:</span><ul><li><a href="#research-hydrogen-transport-and-degradation-in-silicon-solar-cells">Hydrogen transport and degradation in silicon solar cells</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="project-hydrogen-transport-model-title">Hydrogen transport model</h3>
@@ -69,24 +69,24 @@
 </div></article>
 <article class="work-entry" id="project-solar-cell-device-modeling" aria-labelledby="project-solar-cell-device-modeling-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/research/display/HBarrier_FermiDep.webp" alt="Fermi level dependence of the hydrogen diffusion barrier in silicon." width="640" height="480" loading="lazy"/></div>
+<div class="work-image"><img src="assets/research/display/HBarrier_FermiDep.webp" alt="Fermi level dependence of the hydrogen diffusion barrier in silicon." width="660" height="518" loading="lazy"/></div>
 <div class="work-related"><span>Related research:</span><ul><li><a href="#research-fermi-level-and-light-driven-defects-in-silicon-solar-cells">Fermi level and light driven defects in silicon solar cells</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="project-solar-cell-device-modeling-title">Solar-cell device modeling</h3>
-<p>This work connects atomic defect mechanisms to electrical behavior at the solar-cell scale. Quantum ESPRESSO DFT and NEB calculations examine Si–H bond breaking and hydrogen configurations; SCAPS-1D and ASA device models then vary dangling-bond populations and charge states to track band bending, interface recombination, and open-circuit voltage. Python scripts automate device sweeps and analyze their outputs against experimental degradation trends.</p>
+<p>This work connects atomic defect mechanisms to electrical behavior at the solar-cell scale. Quantum ESPRESSO DFT and NEB calculations examine Si–H bond breaking and hydrogen configurations. I used SCAPS-1D to model heterojunction solar cells and understand their sensitivity to dangling-bond defects at interfaces and in doped layers. I developed Python scripts to automate sweeps over defect densities and charge states, track changes in band bending, recombination, and open-circuit voltage, and compare the results with experimental degradation trends.</p>
 </div></article>
 <article class="work-entry" id="project-atomistic-oxygen-transport-pipeline" aria-labelledby="project-atomistic-oxygen-transport-pipeline-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/projects/display/TOPCon-NEB.webp" alt="Animated nudged-elastic-band simulation of atomic transport in TOPCon material." width="640" height="480" loading="lazy"/></div>
+<div class="work-image"><img src="assets/projects/display/TOPCon-NEB.webp" alt="Animated nudged-elastic-band simulation of atomic transport in TOPCon material." width="320" height="160" loading="lazy"/></div>
 <div class="work-related"><span>Related research:</span><ul><li><a href="#research-pinhole-formation-in-topcon-solar-cells">Pinhole formation in TOPCon solar cells</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="project-atomistic-oxygen-transport-pipeline-title">Atomistic oxygen-transport pipeline</h3>
 <ul class="work-links"><li><a href="https://github.com/agoga/TOPCON-MD">GitHub.com/agoga/TOPCON-MD</a></li></ul>
-<p>A Python, LAMMPS, and Slurm workflow creates amorphous SiOₓ samples and generates candidate oxygen-migration paths for nudged-elastic-band calculations. It prepares the endpoint structures, runs jobs, captures failed calculations, and collects energy barriers with local structural information and visualizations. The pipeline probes whether changes in oxygen transport could explain hydrogen-assisted pinhole formation; the published pinhole study encompasses related structural physics beyond this pipeline.</p>
+<p>A Python, LAMMPS, and Slurm workflow creates amorphous SiOₓ samples and generates candidate oxygen-migration paths for nudged-elastic-band calculations. It prepares the endpoint structures, runs HPC jobs, captures failed calculations, and collects energy barriers with local structural information and visualizations. The calculations showed that increased hydrogen concentration reduced oxygen diffusion, contrary to initial expectations. This indicated that oxygen diffusion alone could not explain hydrogen-induced pinhole formation.</p>
 </div></article>
 <article class="work-entry" id="project-quantum-transport-simulations" aria-labelledby="project-quantum-transport-simulations-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image work-placeholder" aria-hidden="true"><span>Image coming soon</span></div>
+<div class="work-image"><img src="assets/projects/display/ScalingCurve.webp" alt="Finite-size scaling of the transition between insulating and conducting behavior." width="596" height="600" loading="lazy"/></div>
 <div class="work-related"><span>Related research:</span><ul><li><a href="#research-critical-transport-in-quantum-dot-solids">Critical transport in quantum-dot solids</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="project-quantum-transport-simulations-title">Quantum transport simulations</h3>
@@ -94,7 +94,7 @@
 </div></article>
 <article class="work-entry" id="project-stellar-spectral-analysis-pipeline" aria-labelledby="project-stellar-spectral-analysis-pipeline-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image work-placeholder" aria-hidden="true"><span>Image coming soon</span></div>
+<div class="work-image"><img src="assets/projects/display/nres_pipeline.webp" alt="NRES stellar spectral analysis pipeline." width="660" height="640" loading="lazy"/></div>
 <div class="work-related"><span>Related research:</span><ul><li><a href="#research-magnetic-activity-cycles-in-sun-like-stars">Magnetic activity cycles in Sun-like stars</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="project-stellar-spectral-analysis-pipeline-title">Stellar spectral analysis pipeline</h3>
@@ -103,15 +103,15 @@
 </div></article>
 <article class="work-entry" id="project-exploratory-development-of-a-si-o-h-interatomic-potential" aria-labelledby="project-exploratory-development-of-a-si-o-h-interatomic-potential-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image work-placeholder" aria-hidden="true"><span>Image coming soon</span></div>
+<div class="work-image"><img src="assets/projects/display/Mace_Potential.webp" alt="Results from the exploratory MACE interatomic potential." width="640" height="480" loading="lazy"/></div>
 </div>
 <div class="work-copy"><h3 id="project-exploratory-development-of-a-si-o-h-interatomic-potential-title">Exploratory development of a Si–O–H interatomic potential</h3>
 <ul class="work-links"><li><a href="https://github.com/agoga/mace-training-SiOH">GitHub.com/agoga/mace-training-SiOH</a></li></ul>
-<p>This repository explores training a MACE interatomic potential for silicon, oxygen, and hydrogen from Quantum ESPRESSO calculations. Python scripts collect DFT inputs and outputs, extract structures, energies, and forces into MACE-compatible extended XYZ data, and provide an initial training setup. The model remains exploratory.</p>
+<p>This repository explores training a MACE interatomic potential for silicon, oxygen, and hydrogen from Quantum ESPRESSO calculations. Python scripts collect DFT inputs and outputs, extract structures, energies, and forces into MACE-compatible extended XYZ data, and provide an initial training setup. The project remains exploratory.</p>
 </div></article>
 <article class="work-entry" id="project-gray-scott-reaction-diffusion-simulator" aria-labelledby="project-gray-scott-reaction-diffusion-simulator-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image work-placeholder" aria-hidden="true"><span>Image coming soon</span></div>
+<div class="work-image"><img src="assets/projects/display/gray_scott_python.webp" alt="Animated Gray-Scott reaction-diffusion patterns." width="256" height="256" loading="lazy"/></div>
 </div>
 <div class="work-copy"><h3 id="project-gray-scott-reaction-diffusion-simulator-title">Gray–Scott reaction–diffusion simulator</h3>
 <ul class="work-links"><li><a href="https://github.com/agoga/gray-scott-cuda">GitHub.com/agoga/gray-scott-cuda</a></li></ul>
@@ -119,7 +119,7 @@
 </div></article>
 <article class="work-entry" id="project-microwave-scattering-from-a-lattice-of-metal-spheres" aria-labelledby="project-microwave-scattering-from-a-lattice-of-metal-spheres-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image work-placeholder" aria-hidden="true"><span>Image coming soon</span></div>
+<div class="work-image"><img src="assets/projects/display/MieScattering.webp" alt="Microwave scattering simulation for a lattice of metal spheres." width="660" height="585" loading="lazy"/></div>
 </div>
 <div class="work-copy"><h3 id="project-microwave-scattering-from-a-lattice-of-metal-spheres-title">Microwave scattering from a lattice of metal spheres</h3>
 <ul class="work-links"><li><a href="https://github.com/agoga/MieCCU">GitHub.com/agoga/MieCCU</a></li></ul>
@@ -127,15 +127,15 @@
 </div></article>
 <article class="work-entry" id="project-dawn-of-empires" aria-labelledby="project-dawn-of-empires-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/projects/display/DawnOfEmpires.webp" alt="Dawn of Empires gameplay screenshot" width="640" height="480" loading="lazy"/></div>
+<div class="work-image"><img src="assets/projects/display/DawnOfEmpires.webp" alt="Dawn of Empires gameplay screenshot" width="660" height="321" loading="lazy"/></div>
 </div>
 <div class="work-copy"><h3 id="project-dawn-of-empires-title">Dawn of Empires</h3>
 <ul class="work-links"><li><a href="https://www.youtube.com/channel/UCOQdSPZFSz2dCGZIHv_ul3w">Student game demos channel</a></li></ul>
-<p>A four-player 3D space shooter with ship combat, warping, upgrades, and sector control. I worked on its design and client–server networking.</p>
+<p>A four-player 3D space shooter with ship combat, warping, upgrades, and sector control. I was lead designer and developed the client–server networking.</p>
 </div></article>
 <article class="work-entry" id="project-turn-style" aria-labelledby="project-turn-style-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/projects/display/TurnStyle.webp" alt="Animated Turn Style gameplay" width="640" height="480" loading="lazy" style="transform: scale(1.08108108); transform-origin: top right;"/></div>
+<div class="work-image"><img src="assets/projects/display/TurnStyle.webp" alt="Animated Turn Style gameplay" width="320" height="240" loading="lazy" style="transform: scale(1.08108108); transform-origin: top right;"/></div>
 </div>
 <div class="work-copy"><h3 id="project-turn-style-title">Turn Style</h3>
 <ul class="work-links"><li><a href="https://www.youtube.com/channel/UCOQdSPZFSz2dCGZIHv_ul3w">Student game demos channel</a></li></ul>
@@ -145,7 +145,7 @@
 <section id="research" class="work-panel" aria-label="Research">
 <article class="work-entry" id="research-hydrogen-transport-and-degradation-in-silicon-solar-cells" aria-labelledby="research-hydrogen-transport-and-degradation-in-silicon-solar-cells-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/research/display/HydrogenPassivationDegredation.webp" alt="SIMs profile of hydrogen in TOPCCon cells" width="640" height="480" loading="lazy"/></div>
+<div class="work-image"><img src="assets/research/display/HydrogenPassivationDegredation.webp" alt="SIMs profile of hydrogen in TOPCCon cells" width="660" height="505" loading="lazy"/></div>
 <div class="work-related"><span>Related project:</span><ul><li><a href="#project-hydrogen-transport-model">Hydrogen transport model</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="research-hydrogen-transport-and-degradation-in-silicon-solar-cells-title">Hydrogen transport and degradation in silicon solar cells</h3>
@@ -154,42 +154,42 @@
 </div></article>
 <article class="work-entry" id="research-fermi-level-and-light-driven-defects-in-silicon-solar-cells" aria-labelledby="research-fermi-level-and-light-driven-defects-in-silicon-solar-cells-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/research/display/HBarrier_FermiDep.webp" alt="Fermi level dependence of the hydrogen diffusion barrier in silicon." width="640" height="480" loading="lazy"/></div>
+<div class="work-image"><img src="assets/research/display/HBarrier_FermiDep.webp" alt="Fermi level dependence of the hydrogen diffusion barrier in silicon." width="660" height="518" loading="lazy"/></div>
 <div class="work-related"><span>Related project:</span><ul><li><a href="#project-solar-cell-device-modeling">Solar-cell device modeling</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="research-fermi-level-and-light-driven-defects-in-silicon-solar-cells-title">Fermi level and light driven defects in silicon solar cells</h3>
-<p>Hydrogen passivates dangling bonds at silicon interfaces, but a broken Si–H bond can leave a recombination-active defect. First-principles calculations follow that bond-breaking path under different doping and illumination conditions. The predicted barriers fall asymmetrically for p-type and n-type silicon and fall further under illumination, consistent with measured hydrogen mobility and light-induced degradation. In additional work presented in Chapter 2 of my thesis, I connected DFT calculations of silicon–hydrogen bond-breaking barriers with TCAD simulations of how the resulting defects affect silicon heterojunction solar cells. Together, these results showed that p-type contacts both generate defects more readily and suffer greater voltage losses from those defects, helping explain their stronger degradation compared with n-type contacts in experiments.</p>
+<p>We found that doping and illumination change the energy required to break silicon–hydrogen bonds and create recombination-active defects. First-principles calculations showed that p-type silicon is more susceptible to bond breaking than n-type silicon, and that illumination further lowers the barriers. I connected these calculations with device simulations to examine how the resulting defects affect silicon heterojunction solar cells. The simulations showed that p-type contacts also suffer greater voltage losses from these defects, helping explain their stronger degradation in experiments.</p>
 <h4>Paper</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://arxiv.org/abs/2501.06667">Fermi Level and Light Driven Defect Generation in Silicon Solar Cells</a></span>. A. Diggs, Z. Zhao, <strong>A. Goga</strong>, Z. Crawford, and G. T. Zimanyi, <em>arXiv:2501.06667</em> (2025).</li></ul>
-<h4>Presentations</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC59419.2025.11132609">The Fermi-Level Dependence of Hydrogen Dynamics and Its Effects on Degradation of Silicon Heterojunction Solar Cells</a></span>. <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2025).</li><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC57443.2024.10749578">Light Induced Degradation in Silicon Heterojunction Solar Cells</a></span>. <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2024).</li></ul>
+<h4>Presentations</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC59419.2025.11132609">The Fermi-Level Dependence of Hydrogen Dynamics and Its Effects on Degradation of Silicon Heterojunction Solar Cells</a></span>. <strong>A. Goga</strong>, Z. Zhao, A. Diggs, Z. Crawford, and G. T. Zimányi, <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2025).</li><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC57443.2024.10749578">Light Induced Degradation in Silicon Heterojunction Solar Cells</a></span>. Z. Zhao, A. Diggs, Z. Crawford, <strong>A. Goga</strong>, and G. T. Zimanyi, <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2024).</li></ul>
 </div></article>
 <article class="work-entry" id="research-pinhole-formation-in-topcon-solar-cells" aria-labelledby="research-pinhole-formation-in-topcon-solar-cells-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/research/display/TOPCon_pinhole.webp" alt="TOPCon pinhole formed in MD simulations." width="640" height="480" loading="lazy"/></div>
+<div class="work-image"><img src="assets/research/display/TOPCon_pinhole.webp" alt="TOPCon pinhole formed in MD simulations." width="660" height="659" loading="lazy"/></div>
 <div class="work-related"><span>Related project:</span><ul><li><a href="#project-atomistic-oxygen-transport-pipeline">Atomistic oxygen-transport pipeline</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="research-pinhole-formation-in-topcon-solar-cells-title">Pinhole formation in TOPCon solar cells</h3>
 <p>We used molecular dynamics simulations to investigate how silicon-rich pinholes form in the thin oxide layers of TOPCon and POLO solar cells during thermal processing. The simulations showed that excess hydrogen lowers the barrier for nucleation-driven phase separation, allowing pinholes to form at lower temperatures. This helps explain why hydrogen initially improves passivation but causes degradation at higher concentrations, where emerging pinholes create additional dangling-bond defects. Removing hydrogen dissolved small pinhole nuclei in the simulations, suggesting a structural mechanism for recovery.</p>
 <h4>Paper</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://doi.org/10.1021/acsaem.4c00171">Pinhole Formation by Nucleation-Driven Phase Separation in TOPCon and POLO Solar Cells: Structural Dynamics and Optimization</a></span>. A. Diggs, Z. Crawford, <strong>A. Goga</strong>, Z. Zhao, J. Stuckelberger, and G. T. Zimányi, <em>ACS Appl. Energy Mater.</em> <strong>7</strong>, 3414–3423 (2024).</li></ul>
-<h4>Presentations</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC59419.2025.11132571">Pinhole Dynamics in Textured Passivated-Contact Si Solar Cells</a></span>. <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2025).</li><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC57443.2024.10749186">Pinhole Formation by Nucleated Phase Separation in TOPCon and POLO Solar Cells: Structural Dynamics and Optimization</a></span>. <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2024).</li><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC48320.2023.10359586">TOPCon Solar Cell Degradation via Pinhole Nucleation</a></span>. <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2023).</li></ul>
+<h4>Presentations</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC59419.2025.11132571">Pinhole Dynamics in Textured Passivated-Contact Si Solar Cells</a></span>. Z. Crawford, A. Diggs, <strong>A. Goga</strong>, Z. Zhao, and G. T. Zimanyi, <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2025).</li><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC57443.2024.10749186">Pinhole Formation by Nucleated Phase Separation in TOPCon and POLO Solar Cells: Structural Dynamics and Optimization</a></span>. A. Diggs, Z. Crawford, <strong>A. Goga</strong>, Z. Zhao, and G. T. Zimanyi, <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2024).</li><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC48320.2023.10359586">TOPCon Solar Cell Degradation via Pinhole Nucleation</a></span>. A. Diggs, <strong>A. Goga</strong>, Z. Crawford, and G. T. Zimanyi, <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2023).</li></ul>
 </div></article>
 <article class="work-entry" id="research-critical-transport-in-quantum-dot-solids" aria-labelledby="research-critical-transport-in-quantum-dot-solids-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image"><img src="assets/research/display/ScalingCurve.webp" alt="Finite size scaling curve showing the transition between insulating and conducting behavior." width="640" height="480" loading="lazy"/></div>
+<div class="work-image"><img src="assets/research/display/PhaseTransition.webp" alt="Phase diagram of the transport transition in quantum-dot solids." width="660" height="330" loading="lazy"/></div>
 <div class="work-related"><span>Related project:</span><ul><li><a href="#project-quantum-transport-simulations">Quantum transport simulations</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="research-critical-transport-in-quantum-dot-solids-title">Critical transport in quantum-dot solids</h3>
 <p>Electron transport through a connected quantum-dot solid depends on disorder both within the dots and in the connections between them. An Anderson Hamiltonian informed by electron tomography, analyzed with the transfer-matrix method and finite-size scaling, maps the transition between insulating and conducting behavior. Weak disorder in the connections produces a crossover between distinct critical regimes over a broad part of the phase diagram.</p>
 <h4>Paper</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://arxiv.org/abs/2506.03676">Critical Transport Behavior in Quantum Dot Solids</a></span>. Z. Crawford*, <strong>A. Goga</strong>*, M. Kovtun, and G. Zimanyi, *Co-First Authors, <em>arXiv:2506.03676</em> (2025).</li></ul>
-<h4>Presentations</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC48317.2022.9938887">Critical Transport Behavior in Quantum Dot Solids</a></span>. <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2022).</li></ul>
+<h4>Presentations</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://doi.org/10.1109/PVSC48317.2022.9938887">Critical Transport Behavior in Quantum Dot Solids</a></span>. M. Kovtun, Z. Crawford, <strong>A. Goga</strong>, and G. T. Zimanyi, <em>IEEE Photovoltaic Specialists Conference (PVSC)</em> (2022).</li></ul>
 </div></article>
 <article class="work-entry" id="research-magnetic-activity-cycles-in-sun-like-stars" aria-labelledby="research-magnetic-activity-cycles-in-sun-like-stars-title" tabindex="-1">
 <div class="work-media">
-<div class="work-image work-placeholder" aria-hidden="true"><span>Image coming soon</span></div>
+<div class="work-image"><img src="assets/research/display/nres_results.webp" alt="Stellar magnetic activity measurements from NRES spectra." width="660" height="362" loading="lazy"/></div>
 <div class="work-related"><span>Related project:</span><ul><li><a href="#project-stellar-spectral-analysis-pipeline">Stellar spectral analysis pipeline</a></li></ul></div>
 </div>
 <div class="work-copy"><h3 id="research-magnetic-activity-cycles-in-sun-like-stars-title">Magnetic activity cycles in Sun-like stars</h3>
-<p>Magnetic activity in Sun-like stars varies over years to decades and may change as stars age and spin down. This survey measures emission from calcium H and K lines in spectra taken by a network of telescopes. Combining observations across sites and years provides the time series needed to examine long activity cycles and possible changes around stellar mid-life.</p>
-<h4>Presentations</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://ui.adsabs.harvard.edu/abs/2019shin.confE.111G/abstract">Do Sun-like Stars Experience a Magnetic Mid-life Crisis? Investigation from a New Ca HK Activity Survey Using LCO NRES</a></span>. <em>SHINE Conference</em> (2019).</li></ul>
+<p>Magnetic activity in Sun-like stars varies over years to decades and may change as stars age and spin down. The Las Cumbres Observatory telescope network makes observations publicly available after a proprietary period, providing a large archive of stellar spectra collected for many different observing programs. This survey draws on that archive to measure emission from calcium H and K lines and examine long-term activity cycles and possible changes around stellar mid-life.</p>
+<h4>Presentations</h4><ul class="work-citations"><li><span class="citation-title"><a href="https://ui.adsabs.harvard.edu/abs/2019shin.confE.111G/abstract">Do Sun-like Stars Experience a Magnetic Mid-life Crisis? Investigation from a New Ca HK Activity Survey Using LCO NRES</a></span>. <strong>A. Goga</strong>, T. S. Metcalfe, R. Egeland, and T. M. Brown, <em>SHINE Conference</em> (2019).</li></ul>
 </div></article>
 </section>
 </section>

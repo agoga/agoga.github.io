@@ -45,6 +45,8 @@ def main():
             converted[source] = destination
             print(f'{source.name}: {source.stat().st_size:,} -> {destination.stat().st_size:,} bytes')
         item['image'] = converted[source].relative_to(ROOT).as_posix()
+        with Image.open(converted[source]) as display:
+            item['imageWidth'], item['imageHeight'] = display.size
     catalog.write_text(json.dumps(items, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 

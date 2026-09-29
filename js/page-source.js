@@ -77,6 +77,21 @@ export class PageSource {
     try {
       const render = await loadRasterizer();
       if (!this.active || this.disposed || generation !== this.generation) return;
+      // html2canvas does not reproduce CSS grid/display:contents reliably.
+      // Freeze portfolio boxes at their live positions in the capture clone.
+      const layoutSelectors = ['#work', '.work-tabs', '.work-panel', '.work-entry',
+        '.work-image', '.work-copy', '.work-related'];
+      const layout = layoutSelectors.flatMap(selector => [...document.querySelectorAll(selector)].map((element, index) => {
+        const parent = element.matches('#work') ? element.offsetParent
+          : element.matches('.work-image, .work-copy, .work-related') ? element.closest('.work-entry')
+          : element.parentElement;
+        const rect = element.getBoundingClientRect();
+        const origin = parent.getBoundingClientRect();
+        return { selector, index, width: rect.width, height: rect.height,
+          left: rect.left - origin.left - parent.clientLeft,
+          top: rect.top - origin.top - parent.clientTop };
+      }));
+      const documentHeight = document.documentElement.scrollHeight;
       const image = await render(document.body, {
         ...viewport,
         scrollX: viewport.x,
@@ -93,7 +108,7 @@ export class PageSource {
           || element.id === 'animation-toggle' || element.classList.contains('skip-link')
           // Never make a snapshot fetch/decode lazy images outside the viewport
           // or wait for an image still loading. Its load event refreshes the source.
-          || (element.tagName === 'IMG' && (!element.complete || (() => {
+          || (element.tagName === 'IMG' && element.parentElement?.classList.contains('work-image') && (!element.complete || (() => {
             const bounds = element.getBoundingClientRect();
             return !bounds.width || !bounds.height || bounds.bottom <= 0
               || bounds.top >= viewport.height || bounds.right <= 0 || bounds.left >= viewport.width;
@@ -102,9 +117,21 @@ export class PageSource {
           // White space contributes zero source. Never capture the WebGL canvas.
           doc.documentElement.style.background = '#ffffff';
           doc.body.style.background = '#ffffff';
+          doc.body.style.minHeight = `${documentHeight}px`;
           // Keep the controls' space, but omit their text/values from the source.
           const controls = doc.querySelector('#simulation-controls');
           if (controls) controls.style.visibility = 'hidden';
+          doc.querySelectorAll('.work-media').forEach(media => media.replaceWith(...media.childNodes));
+          for (const box of layout) {
+            const element = doc.querySelectorAll(box.selector)[box.index];
+            if (!element || !box.width || !box.height) continue;
+            Object.assign(element.style, {
+              position: 'absolute', display: 'block', boxSizing: 'border-box',
+              left: `${box.left}px`, top: `${box.top}px`,
+              width: `${box.width}px`, height: `${box.height}px`, margin: '0',
+            });
+            if (element.matches('.work-tabs')) element.style.display = 'flex';
+          }
         },
       });
       const current = viewport.x === window.scrollX && viewport.y === window.scrollY

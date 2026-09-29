@@ -116,7 +116,7 @@ def render(check=False):
                 width, height = item.get('imageWidth', 640), item.get('imageHeight', 480)
                 if any(type(size) is not int or size <= 0 for size in (width, height)):
                     raise ValueError('Image dimensions must be positive integers')
-                out.append(f'<div class="work-image"><img src="{esc(path)}" alt="{esc(item["imageAlt"])}" width="{width}" height="{height}" loading="lazy"{crop_style}/></div>')
+                out.append(f'<div class="work-image" style="aspect-ratio: {width} / {height}"><img src="{esc(path)}" alt="{esc(item["imageAlt"])}" width="{width}" height="{height}" loading="lazy"{crop_style}/></div>')
             else:
                 out.append('<div class="work-image work-placeholder" aria-hidden="true"><span>Image coming soon</span></div>')
             if item['related']:

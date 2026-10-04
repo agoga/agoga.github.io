@@ -281,7 +281,7 @@ footer a {
 @media screen and (min-width: 900px) {
   body { font-size: 1.375rem; }
   .site-shell { max-width: 1760px; padding: 0 48px; }
-  #simulation-controls { max-width: 1184px; margin-inline: auto; }
+  #simulation-controls { max-width: 1080px; margin-inline: auto; }
   .intro { grid-template-columns: minmax(0, 1fr) 240px; gap: 54px; }
   h1 { font-size: 4.5rem; }
   h2 { font-size: 2.5rem; }

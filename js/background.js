@@ -22,11 +22,11 @@ const SETTINGS = {
   color: [184 / 255, 204 / 255, 226 / 255], // Cool blue #B8CCE2, including at full opacity.
 };
 
-const DEFAULTS = Object.freeze({ ...SETTINGS });
-
 // Optional startup preset; definitions are shared with the temporary buttons.
-const ACTIVE_PRESET = null;
+const ACTIVE_PRESET = 'mitosis';
 if (ACTIVE_PRESET !== null) Object.assign(SETTINGS, PRESETS[ACTIVE_PRESET]);
+
+const DEFAULTS = Object.freeze({ ...SETTINGS });
 
 const vertex = `#version 300 es
 precision highp float;

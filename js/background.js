@@ -320,7 +320,7 @@ let pageSource;
 let frame = 0;
 let previousTime = null;
 let accumulator = 0;
-let paused = false;
+let paused = true;
 let failed = false;
 let contextLost = false;
 let needsResize = true;
@@ -543,7 +543,10 @@ function sync() {
   canvas.hidden = failed || reducedMotion.matches || !simulation?.initialized;
   button.hidden = failed || reducedMotion.matches;
   controls.hidden = failed || reducedMotion.matches;
-  if (failed || reducedMotion.matches || document.hidden) return;
+  button.querySelector('[aria-hidden]').textContent = paused ? '\u25b6' : '\u25a0';
+  button.querySelector('.button-label').textContent = paused ? 'Play background' : 'Stop background (Esc)';
+  // Starting off must not initialize WebGL or take a seed snapshot.
+  if (failed || reducedMotion.matches || document.hidden || (paused && !simulation?.initialized)) return;
   try {
     if (!simulation) {
       simulation = new Simulation(canvas);
@@ -570,16 +573,14 @@ function sync() {
         },
       });
     }
-    button.querySelector('[aria-hidden]').textContent = paused ? '\u25b6' : '\u25a0';
-    button.querySelector('.button-label').textContent = paused ? 'Play background' : 'Stop background (Esc)';
     if (needsResize) {
       simulation.resize();
       needsResize = false;
     }
     simulation.render();
-    if (!paused || !simulation.initialized) {
+    if (!paused) {
       pageSource.setActive(true);
-      if (!paused && simulation.initialized) frame = requestAnimationFrame(tick);
+      if (simulation.initialized) frame = requestAnimationFrame(tick);
     }
   } catch (error) { fail(error); }
 }

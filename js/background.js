@@ -18,7 +18,7 @@ const SETTINGS = {
   sourceStrength: 0.01,
   mouseRadius: 30,
   initialSourceStrength: 0.5,
-  opacity: 0.5,
+  opacity: 0.25,
   color: [184 / 255, 204 / 255, 226 / 255], // Cool blue #B8CCE2, including at full opacity.
 };
 

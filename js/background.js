@@ -320,7 +320,7 @@ let pageSource;
 let frame = 0;
 let previousTime = null;
 let accumulator = 0;
-let paused = true;
+let paused = false;
 let failed = false;
 let contextLost = false;
 let needsResize = true;
@@ -539,14 +539,13 @@ function tick(now) {
 function sync() {
   stop();
   pageSource?.setActive(false);
-  if (contextLost) return;
-  canvas.hidden = failed || reducedMotion.matches || !simulation?.initialized;
+  canvas.hidden = paused || failed || contextLost || reducedMotion.matches || !simulation?.initialized;
   button.hidden = failed || reducedMotion.matches;
   controls.hidden = failed || reducedMotion.matches;
   button.querySelector('[aria-hidden]').textContent = paused ? '\u25b6' : '\u25a0';
   button.querySelector('.button-label').textContent = paused ? 'Play background' : 'Stop background (Esc)';
-  // Starting off must not initialize WebGL or take a seed snapshot.
-  if (failed || reducedMotion.matches || document.hidden || (paused && !simulation?.initialized)) return;
+  // Stop clears the visible background and leaves snapshots inactive until Play.
+  if (paused || failed || contextLost || reducedMotion.matches || document.hidden) return;
   try {
     if (!simulation) {
       simulation = new Simulation(canvas);

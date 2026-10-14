@@ -56,7 +56,7 @@ Validation catches invalid kinds/IDs, duplicate IDs, broken reciprocal relations
 - `js/palette-preview.js`: retained palette experiments. Set `SHOW_PALETTE_PREVIEW` in `background.js` to `true` to restore them. Cool blue is the default.
 - `js/page-source.js`: event-driven viewport capture with bundled html2canvas; one capture in flight, stale results rejected. Tab/content changes invalidate the capture.
 
-The background starts off. WebGL initialization and the first page snapshot wait until the visitor selects Play background.
+The background starts on. Stop background (or Escape) clears the visible pattern and pauses animation and snapshots until the visitor selects Play background.
 
 The initial page snapshot seeds the chemicals. `sourceStrength` controls subsequent page/mouse injection; zero disables ongoing injection, not the seed. The solver adapts its timestep to diffusion/reaction rates. Presets were informed by [Karl Sims](https://www.karlsims.com/rd.html) and [Munafo's atlas](https://www.mrob.com/pub/comp/xmorphia/pearson-classes.html), then tuned locally; they are not exact reproductions.
 

@@ -1,4 +1,5 @@
 import { PageSource } from './page-source.js?v=viewport-layout-34';
+import { TextMask } from './text-mask.js?v=text-mask-38';
 import { mountPalettePreview } from './palette-preview.js'; // Temporary palette UI.
 import { PRESETS, mountParameterPreview } from './parameter-preview.js';
 
@@ -80,9 +81,10 @@ void main() {
 const display = fragmentHeader + `
 uniform vec3 ink;
 uniform float opacity;
+uniform sampler2D textMask;
 void main() {
   float b = texture(state, uv).g;
-  float alpha = clamp(b / 0.32, 0.0, 1.0) * opacity;
+  float alpha = clamp(b / 0.32, 0.0, 1.0) * opacity * (1.0 - texture(textMask, uv).a);
   result = vec4(ink * alpha, alpha);
 }`;
 
@@ -117,6 +119,16 @@ class Simulation {
       this.displayProgram = this.program(display);
       this.copyProgram = this.program(copy);
       this.initializeProgram = this.program(initialize);
+      this.textMask = new TextMask(document.querySelector('.site-shell'));
+      this.textMaskTexture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, this.textMaskTexture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
+      gl.useProgram(this.displayProgram);
+      gl.uniform1i(gl.getUniformLocation(this.displayProgram, 'textMask'), 2);
       this.sourceTexture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -229,7 +241,7 @@ class Simulation {
         this.release(oldBack);
       }
     }
-    const displayLimit = Math.min(this.gl.getParameter(this.gl.MAX_RENDERBUFFER_SIZE), ...this.gl.getParameter(this.gl.MAX_VIEWPORT_DIMS));
+    const displayLimit = Math.min(this.gl.getParameter(this.gl.MAX_TEXTURE_SIZE), this.gl.getParameter(this.gl.MAX_RENDERBUFFER_SIZE), ...this.gl.getParameter(this.gl.MAX_VIEWPORT_DIMS));
     const displayScale = Math.min(window.devicePixelRatio || 1, displayLimit / Math.max(width, height));
     const displayWidth = Math.max(1, Math.round(width * displayScale));
     const displayHeight = Math.max(1, Math.round(height * displayScale));
@@ -265,7 +277,20 @@ class Simulation {
   }
 
   render() {
-    if (this.initialized) this.draw(this.displayProgram, this.front);
+    if (!this.initialized) return;
+    const gl = this.gl;
+    const mask = this.textMask.update(this.canvas.width, this.canvas.height);
+    gl.activeTexture(gl.TEXTURE2);
+    gl.bindTexture(gl.TEXTURE_2D, this.textMaskTexture);
+    if (mask) {
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      try {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask);
+      } finally {
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+      }
+    }
+    this.draw(this.displayProgram, this.front);
   }
 
   setSource(image) {
@@ -293,10 +318,12 @@ class Simulation {
   }
 
   dispose() {
+    this.textMask?.dispose();
     if (!this.gl) return;
     for (const target of this.targets) this.release(target);
     for (const program of this.programs) this.gl.deleteProgram(program);
     this.gl.deleteTexture(this.sourceTexture);
+    this.gl.deleteTexture(this.textMaskTexture);
     this.programs = [];
   }
 }
@@ -616,6 +643,7 @@ canvas.addEventListener('webglcontextlost', event => {
   stop();
   pageSource?.dispose();
   pageSource = null;
+  simulation?.dispose();
   simulation = null;
   canvas.hidden = true;
 });

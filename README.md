@@ -55,7 +55,7 @@ Validation catches invalid kinds/IDs, duplicate IDs, broken reciprocal relations
 - `js/parameter-preview.js`: current user-tuned `PRESETS` and labels. This code is the source of truth; there is intentionally no duplicate parameter table here. Add `stepsPerSecond` for a preset-specific speed. Omitted properties retain their current values.
 - `js/palette-preview.js`: retained palette experiments. Set `SHOW_PALETTE_PREVIEW` in `background.js` to `true` to restore them. Cool blue is the default.
 - `js/page-source.js`: event-driven viewport capture with bundled html2canvas; one capture in flight, stale results rejected. Tab/content changes invalidate the capture.
-- `js/text-mask.js`: live text rectangles with 4px padding, applied only when displaying the background. Scroll, layout, font, and content changes refresh the mask independently of snapshots.
+- `js/text-mask.js`: live text masks with 2px padding, 8px corner radius, and a soft 6px halo, applied only when displaying the background. Scroll, layout, font, and content changes refresh the mask independently of snapshots.
 
 The background starts on. Stop background (or Escape) clears the visible pattern and pauses animation and snapshots until the visitor selects Play background.
 

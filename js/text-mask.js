@@ -1,5 +1,8 @@
 // Live text geometry for the display pass only; never part of the page source.
-const PADDING = 4; // CSS pixels around each rendered line of text.
+// CSS pixels: keep the clear core tight, with rounded corners and a soft halo.
+const PADDING = 2;
+const CORNER_RADIUS = 8;
+const FEATHER = 6;
 
 export class TextMask {
   constructor(root) {
@@ -34,8 +37,13 @@ export class TextMask {
     const context = this.context;
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.clearRect(0, 0, width, height);
-    context.scale(width / window.innerWidth, height / window.innerHeight);
+    const scaleX = width / window.innerWidth;
+    const scaleY = height / window.innerHeight;
+    context.scale(scaleX, scaleY);
     context.fillStyle = '#ffffff';
+    context.shadowColor = '#ffffff';
+    // Canvas shadows use backing pixels, independently of the transform.
+    context.shadowBlur = FEATHER * Math.max(scaleX, scaleY);
     const walker = document.createTreeWalker(this.root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, {
       acceptNode(node) {
         if (node.nodeType === Node.ELEMENT_NODE) {
@@ -53,11 +61,14 @@ export class TextMask {
       // Range rectangles follow wrapping and inline links/emphasis without
       // blanking the unused width of a heading, paragraph, or content column.
       for (const rect of range.getClientRects()) {
-        if (!rect.width || !rect.height || rect.bottom + PADDING <= 0
-            || rect.top - PADDING >= window.innerHeight || rect.right + PADDING <= 0
-            || rect.left - PADDING >= window.innerWidth) continue;
-        context.fillRect(rect.left - PADDING, rect.top - PADDING,
-          rect.width + 2 * PADDING, rect.height + 2 * PADDING);
+        const margin = PADDING + FEATHER;
+        if (!rect.width || !rect.height || rect.bottom + margin <= 0
+            || rect.top - margin >= window.innerHeight || rect.right + margin <= 0
+            || rect.left - margin >= window.innerWidth) continue;
+        context.beginPath();
+        context.roundRect(rect.left - PADDING, rect.top - PADDING,
+          rect.width + 2 * PADDING, rect.height + 2 * PADDING, CORNER_RADIUS);
+        context.fill();
       }
     }
     return this.canvas;
